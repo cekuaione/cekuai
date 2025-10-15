@@ -5,9 +5,6 @@ on:
     branches: [ test ]
   workflow_dispatch:
 
-env:
-  DEPLOY_PATH: /home/ubuntu/cekuai-test
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -25,9 +22,9 @@ jobs:
     
     - name: Deploy to OCI Test
       run: |
-        ssh -i ~/.ssh/oci_key ubuntu@${{ secrets.OCI_HOST }} << 'ENDSSH'
-          cd ${{ env.DEPLOY_PATH }} || mkdir -p ${{ env.DEPLOY_PATH }}
-          cd ${{ env.DEPLOY_PATH }}
+        ssh -i ~/.ssh/oci_key ubuntu@${{ secrets.OCI_HOST }} bash << 'ENDSSH'
+          cd /home/ubuntu/cekuai-test || mkdir -p /home/ubuntu/cekuai-test
+          cd /home/ubuntu/cekuai-test
           
           if [ -d .git ]; then
             git pull origin test
@@ -35,29 +32,12 @@ jobs:
             git clone -b test https://github.com/cekuaione/cekuai.git .
           fi
           
-          cat > .env << 'ENVEOF'
-EXERCISEDB_API_KEY=${{ secrets.EXERCISEDB_API_KEY }}
-OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
-NEXT_PUBLIC_API_URL=http://${{ secrets.OCI_HOST }}:3001
-ENVEOF
+          echo "EXERCISEDB_API_KEY=${{ secrets.EXERCISEDB_API_KEY }}" > .env
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+          echo "NEXT_PUBLIC_API_URL=http://${{ secrets.OCI_HOST }}:3001" >> .env
           
-          cat > docker-compose.yml << 'COMPOSEEOF'
-version: '3.8'
-services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: cekuai-test
-    restart: unless-stopped
-    ports:
-      - "3001:3000"
-    environment:
-      - NODE_ENV=production
-      - EXERCISEDB_API_KEY=${EXERCISEDB_API_KEY}
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-COMPOSEEOF
+          sed -i 's/3000:3000/3001:3000/' docker-compose.yml
+          sed -i 's/cekuai-app/cekuai-test/' docker-compose.yml
           
           docker-compose down || true
           docker-compose up -d --build
@@ -67,5 +47,5 @@ COMPOSEEOF
     
     - name: Verify deployment
       run: |
-        sleep 10
+        sleep 15
         curl -f http://${{ secrets.OCI_HOST }}:3001 || exit 1
