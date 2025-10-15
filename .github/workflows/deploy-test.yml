@@ -1,0 +1,71 @@
+name: Deploy to OCI (Test)
+
+on:
+  push:
+    branches: [ test ]
+  workflow_dispatch:
+
+env:
+  DEPLOY_PATH: /home/ubuntu/cekuai-test
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.OCI_SSH_KEY }}" > ~/.ssh/oci_key
+        chmod 600 ~/.ssh/oci_key
+        ssh-keyscan -H ${{ secrets.OCI_HOST }} >> ~/.ssh/known_hosts
+    
+    - name: Deploy to OCI Test
+      run: |
+        ssh -i ~/.ssh/oci_key ubuntu@${{ secrets.OCI_HOST }} << 'ENDSSH'
+          cd ${{ env.DEPLOY_PATH }} || mkdir -p ${{ env.DEPLOY_PATH }}
+          cd ${{ env.DEPLOY_PATH }}
+          
+          if [ -d .git ]; then
+            git pull origin test
+          else
+            git clone -b test https://github.com/cekuaione/cekuai.git .
+          fi
+          
+          cat > .env << 'ENVEOF'
+EXERCISEDB_API_KEY=${{ secrets.EXERCISEDB_API_KEY }}
+OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+NEXT_PUBLIC_API_URL=http://${{ secrets.OCI_HOST }}:3001
+ENVEOF
+          
+          cat > docker-compose.yml << 'COMPOSEEOF'
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cekuai-test
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=production
+      - EXERCISEDB_API_KEY=${EXERCISEDB_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+COMPOSEEOF
+          
+          docker-compose down || true
+          docker-compose up -d --build
+          docker image prune -af
+          docker ps
+        ENDSSH
+    
+    - name: Verify deployment
+      run: |
+        sleep 10
+        curl -f http://${{ secrets.OCI_HOST }}:3001 || exit 1
