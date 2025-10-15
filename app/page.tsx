@@ -50,10 +50,10 @@ const cardVariants = {
   visible: {
     opacity: 1,
     y: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.43, 0.13, 0.23, 1],
-      },
+    transition: {
+      duration: 0.5,
+      ease: "easeOut" as const,
+    },
   },
 };
 
