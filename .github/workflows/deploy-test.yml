@@ -38,11 +38,11 @@ jobs:
             git clone -b test https://github.com/cekuaione/cekuai.git .
           fi
 
-cat <<'ENVEOF' > .env
-EXERCISEDB_API_KEY=${{ secrets.EXERCISEDB_API_KEY }}
-OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
-NEXT_PUBLIC_API_URL=http://${{ secrets.OCI_HOST }}:3001
-ENVEOF
+          printf "%s\n" \
+            "EXERCISEDB_API_KEY=${{ secrets.EXERCISEDB_API_KEY }}" \
+            "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" \
+            "NEXT_PUBLIC_API_URL=http://${{ secrets.OCI_HOST }}:3001" \
+            > .env
 
           export APP_CONTAINER_NAME=cekuai-test
           export APP_PORT=3001
