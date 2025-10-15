@@ -37,18 +37,17 @@ jobs:
           echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
           echo "NEXT_PUBLIC_API_URL=http://${{ secrets.OCI_HOST }}:3000" >> .env
           
-          docker-compose down || true
-          docker-compose up -d --build
+          docker compose down || true
+          docker compose up -d --build
           
-          echo "⏳ Waiting for build to complete..."
+          echo "⏳ Waiting for build..."
           sleep 60
           
           docker ps
-          docker logs cekuai-app --tail 20
+          docker compose logs --tail 20
         ENDSSH
     
-    - name: Display deployment info
+    - name: Display info
       run: |
-        echo "✅ Deployment completed!"
-        echo "🌐 Production URL: http://${{ secrets.OCI_HOST }}:3000"
-        echo "⏰ Container may need a few more minutes to finish building on ARM"
+        echo "✅ Production deployed!"
+        echo "🌐 http://${{ secrets.OCI_HOST }}:3000"

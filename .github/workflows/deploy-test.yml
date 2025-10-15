@@ -40,18 +40,17 @@ jobs:
           sed -i 's/3000:3000/3001:3000/' docker-compose.yml
           sed -i 's/cekuai-app/cekuai-test/' docker-compose.yml
           
-          docker-compose down || true
-          docker-compose up -d --build
+          docker compose down || true
+          docker compose up -d --build
           
-          echo "⏳ Waiting for build to complete..."
+          echo "⏳ Waiting for build..."
           sleep 60
           
           docker ps
-          docker logs cekuai-test --tail 20
+          docker compose logs --tail 20
         ENDSSH
     
-    - name: Display deployment info
+    - name: Display info
       run: |
-        echo "✅ Deployment completed!"
-        echo "🌐 Test URL: http://${{ secrets.OCI_HOST }}:3001"
-        echo "⏰ Container may need a few more minutes to finish building on ARM"
+        echo "✅ Test deployed!"
+        echo "🌐 http://${{ secrets.OCI_HOST }}:3001"

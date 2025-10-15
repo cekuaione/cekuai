@@ -65,7 +65,7 @@ export default function WorkoutPlanPage() {
     },
   });
 
-  const { control, handleSubmit, watch, setValue, formState: { errors } } = form;
+  const { control, handleSubmit } = form;
 
   const nextStep = () => {
     if (currentStep < totalSteps) {
