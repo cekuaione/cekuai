@@ -39,10 +39,10 @@ jobs:
           fi
 
           cat <<'ENVEOF' > .env
-EXERCISEDB_API_KEY=${{ secrets.EXERCISEDB_API_KEY }}
-OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
-NEXT_PUBLIC_API_URL=http://${{ secrets.OCI_HOST }}:3000
-ENVEOF
+          EXERCISEDB_API_KEY=${{ secrets.EXERCISEDB_API_KEY }}
+          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+          NEXT_PUBLIC_API_URL=http://${{ secrets.OCI_HOST }}:3000
+          ENVEOF
 
           export APP_CONTAINER_NAME=cekuai-app
           export APP_PORT=3000
