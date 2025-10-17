@@ -23,28 +23,60 @@ jobs:
     
     - name: Deploy to OCI Production
       run: |
-        ssh -i ~/.ssh/oci_key ubuntu@${{ secrets.OCI_HOST }} bash << 'ENDSSH'
-          cd /home/ubuntu/cekuai || mkdir -p /home/ubuntu/cekuai
-          cd /home/ubuntu/cekuai
-          
+        ssh -i ~/.ssh/oci_key ubuntu@${{ secrets.OCI_HOST }} bash <<'ENDSSH'
+          set -euo pipefail
+
+          cd /home/ubuntu
+          mkdir -p cekuai
+          cd cekuai
+
           if [ -d .git ]; then
-            git pull origin main
+            git fetch --all --prune
+            git reset --hard origin/main
           else
             git clone https://github.com/cekuaione/cekuai.git .
+            git checkout main
           fi
-          
-          echo "EXERCISEDB_API_KEY=${{ secrets.EXERCISEDB_API_KEY }}" > .env
-          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
-          echo "NEXT_PUBLIC_API_URL=http://${{ secrets.OCI_HOST }}:3000" >> .env
-          
-          docker compose down || true
-          docker compose up -d --build
-          
-          echo "⏳ Waiting for build..."
-          sleep 60
-          
-          docker ps
-          docker compose logs --tail 20
+
+          printf "%s\n" \
+            "EXERCISEDB_API_KEY=${{ secrets.EXERCISEDB_API_KEY }}" \
+            "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" \
+            "NEXT_PUBLIC_API_URL=http://${{ secrets.OCI_HOST }}:3000" \
+            "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" \
+            "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" \
+            "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" \
+            "SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+            "UPSTASH_REDIS_REST_URL=${{ secrets.UPSTASH_REDIS_REST_URL }}" \
+            "UPSTASH_REDIS_REST_TOKEN=${{ secrets.UPSTASH_REDIS_REST_TOKEN }}" \
+          > .env
+
+          export APP_CONTAINER_NAME=cekuai-app
+          export APP_PORT=3000
+          export APP_INTERNAL_PORT=3000
+
+          docker compose down --remove-orphans || true
+          docker compose build --pull
+          docker compose up -d
+
+          echo "⏳ Waiting for app container to report running state..."
+          state=""
+          for attempt in $(seq 1 12); do
+            state=$(docker compose ps --format '{{.State}}' app 2>/dev/null || true)
+            if [[ "$state" == running* ]]; then
+              break
+            fi
+            sleep 10
+          done
+
+          if [[ "$state" != running* ]]; then
+            echo "❌ App container failed to reach running state (state: ${state:-unknown})."
+            docker compose ps
+            docker compose logs --no-color
+            exit 1
+          fi
+
+          docker compose ps
+          docker compose logs --tail 100
         ENDSSH
     
     - name: Display info

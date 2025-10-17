@@ -1,7 +1,8 @@
 node_modules
+npm-debug.log*
+yarn-error.log*
+yarn-debug.log*
+pnpm-debug.log*
 .next
-out
-dist
-.env*.local
 .git
-.DS_Store
+.github
