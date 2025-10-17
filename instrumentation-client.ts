@@ -14,3 +14,6 @@ Sentry.init({
   ],
 })
 
+// Instrument router transitions
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart
+

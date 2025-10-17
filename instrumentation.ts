@@ -18,3 +18,21 @@ export async function register() {
   }
 }
 
+export function onRequestError(
+  err: Error,
+  request: {
+    path: string
+    headers: Record<string, string | string[] | undefined>
+  },
+  context: {
+    routerType: string
+  }
+) {
+  Sentry.captureException(err, {
+    tags: {
+      path: request.path,
+      routerType: context.routerType,
+    },
+  })
+}
+
