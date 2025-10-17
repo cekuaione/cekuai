@@ -50,6 +50,8 @@ const equipmentOptions = [
 
 export default function WorkoutPlanPage() {
   const [currentStep, setCurrentStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
   const totalSteps = 5;
 
@@ -79,9 +81,44 @@ export default function WorkoutPlanPage() {
     }
   };
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     console.log("Form Data:", data);
-    router.push("/sport/workout-plan/result");
+    setErrorMessage(null);
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/workout/plans", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => null);
+        const message =
+          typeof errorBody?.error === "string"
+            ? errorBody.error
+            : "Plan kaydedilemedi. Lütfen tekrar deneyin.";
+        setErrorMessage(message);
+        return;
+      }
+
+      const result = (await response.json()) as { id?: string };
+      if (!result?.id) {
+        setErrorMessage("Plan kimliği alınamadı. Lütfen tekrar deneyin.");
+        return;
+      }
+
+      router.push(`/sport/workout-plan/result?id=${result.id}`);
+    } catch (error) {
+      console.error("Workout plan save failed:", error);
+      setErrorMessage("Beklenmedik bir hata oluştu. Lütfen tekrar deneyin.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const progress = (currentStep / totalSteps) * 100;
@@ -386,7 +423,7 @@ export default function WorkoutPlanPage() {
                   type="button"
                   variant="outline"
                   onClick={prevStep}
-                  disabled={currentStep === 1}
+                  disabled={currentStep === 1 || loading}
                   className="border-slate-600 text-gray-300 hover:bg-slate-600"
                 >
                   ← Geri
@@ -396,17 +433,24 @@ export default function WorkoutPlanPage() {
                   <Button
                     type="button"
                     onClick={nextStep}
+                    disabled={loading}
                     className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
                   >
                     İleri →
                   </Button>
                 ) : (
-                  <Button
-                    type="submit"
-                    className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
-                  >
-                    Planı Oluştur 🎯
-                  </Button>
+                  <div className="flex flex-col items-end gap-2">
+                    {errorMessage && (
+                      <p className="text-sm text-red-400 text-right">{errorMessage}</p>
+                    )}
+                    <Button
+                      type="submit"
+                      disabled={loading}
+                      className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
+                    >
+                      {loading ? "Kaydediliyor..." : "Planı Oluştur 🎯"}
+                    </Button>
+                  </div>
                 )}
               </div>
             </form>
