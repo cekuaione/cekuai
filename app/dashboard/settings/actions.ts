@@ -3,7 +3,7 @@
 import { getSupabaseUserClient, getSupabaseServiceClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { auth } from '@/lib/auth-helpers'
-import { actionRateLimiter } from '@/lib/rate-limit'
+import { actionRateLimiter, applyRateLimit } from '@/lib/rate-limit'
 import * as Sentry from '@sentry/nextjs'
 import { updateProfileSchema } from '@/lib/validations/user'
 
@@ -15,8 +15,8 @@ export async function updateProfile(formData: FormData) {
   }
 
   // Rate limiting
-  const { success } = await actionRateLimiter.limit(session.user.id)
-  if (!success) {
+  const rateResult = await applyRateLimit(actionRateLimiter, session.user.id)
+  if (!rateResult.success) {
     throw new Error('Çok fazla istek. Lütfen bekleyin.')
   }
   
@@ -67,8 +67,8 @@ export async function deleteAccount() {
   }
 
   // Rate limiting
-  const { success } = await actionRateLimiter.limit(session.user.id)
-  if (!success) {
+  const rateResult = await applyRateLimit(actionRateLimiter, session.user.id)
+  if (!rateResult.success) {
     throw new Error('Çok fazla istek. Lütfen bekleyin.')
   }
   
@@ -95,4 +95,3 @@ export async function deleteAccount() {
     throw error
   }
 }
-

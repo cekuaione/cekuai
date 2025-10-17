@@ -1,33 +1,41 @@
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
 
-// Initialize Redis client
-const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-})
+type RateLimiter = Ratelimit | null
 
-// Rate limiter for API endpoints (10 requests per minute per user)
-export const apiRateLimiter = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(10, '1 m'),
-  analytics: true,
-  prefix: '@upstash/ratelimit/api',
-})
+function createRedisClient(): Redis | null {
+  const url = process.env.UPSTASH_REDIS_REST_URL
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN
 
-// Rate limiter for login attempts (5 attempts per 15 minutes per IP)
-export const loginRateLimiter = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(5, '15 m'),
-  analytics: true,
-  prefix: '@upstash/ratelimit/login',
-})
+  if (!url || !token) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn('[RateLimit] Redis credentials missing. Rate limiting disabled.')
+    }
+    return null
+  }
 
-// Rate limiter for server actions (10 requests per minute per user)
-export const actionRateLimiter = new Ratelimit({
-  redis,
-  limiter: Ratelimit.slidingWindow(10, '1 m'),
-  analytics: true,
-  prefix: '@upstash/ratelimit/actions',
-})
+  return new Redis({ url, token })
+}
 
+function createLimiter(redis: Redis | null, prefix: string, limit: number, interval: `${number} ${'s' | 'm' | 'h'}`): RateLimiter {
+  if (!redis) return null
+  return new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(limit, interval),
+    analytics: true,
+    prefix,
+  })
+}
+
+const redis = createRedisClient()
+
+export const apiRateLimiter = createLimiter(redis, '@upstash/ratelimit/api', 10, '1 m')
+export const loginRateLimiter = createLimiter(redis, '@upstash/ratelimit/login', 5, '15 m')
+export const actionRateLimiter = createLimiter(redis, '@upstash/ratelimit/actions', 10, '1 m')
+
+export async function applyRateLimit(limiter: RateLimiter, identifier: string) {
+  if (!limiter) {
+    return { success: true }
+  }
+  return limiter.limit(identifier)
+}

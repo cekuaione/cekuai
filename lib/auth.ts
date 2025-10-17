@@ -3,7 +3,7 @@ import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import { createClient } from '@supabase/supabase-js'
-import { loginRateLimiter } from '@/lib/rate-limit'
+import { applyRateLimit, loginRateLimiter } from '@/lib/rate-limit'
 
 declare module 'next-auth' {
   interface Session {
@@ -17,8 +17,9 @@ declare module 'next-auth' {
   }
 }
 
+const NEXTAUTH_SECRET = process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET
+
 const {
-  NEXTAUTH_SECRET,
   NEXT_PUBLIC_SUPABASE_URL,
   SUPABASE_SERVICE_ROLE_KEY,
   NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -27,7 +28,9 @@ const {
 } = process.env
 
 if (!NEXTAUTH_SECRET) {
-  throw new Error('NEXTAUTH_SECRET is required')
+  console.warn(
+    '[NextAuth] NEXTAUTH_SECRET is not set. Falling back to an insecure development secret. Set NEXTAUTH_SECRET in production.'
+  )
 }
 
 if (!NEXT_PUBLIC_SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY || !NEXT_PUBLIC_SUPABASE_ANON_KEY) {
@@ -53,8 +56,8 @@ providers.push(
       }
 
       // Rate limiting - prevent brute force attacks
-      const { success } = await loginRateLimiter.limit(credentials.email)
-      if (!success) {
+      const rateResult = await applyRateLimit(loginRateLimiter, credentials.email)
+      if (!rateResult.success) {
         console.error('[NextAuth] Rate limit exceeded for:', credentials.email)
         throw new Error('Çok fazla giriş denemesi. 15 dakika sonra tekrar deneyin.')
       }
@@ -99,7 +102,7 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
 }
 
 export const authOptions: NextAuthOptions = {
-  secret: NEXTAUTH_SECRET,
+  secret: NEXTAUTH_SECRET || 'development-secret',
   debug: process.env.NODE_ENV === 'development',
   providers,
   session: {
@@ -164,4 +167,3 @@ export const authOptions: NextAuthOptions = {
 }
 
 export default NextAuth(authOptions)
-

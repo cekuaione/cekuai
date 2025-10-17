@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { getSupabaseUserClient } from '@/lib/supabase/server'
-import { apiRateLimiter } from '@/lib/rate-limit'
+import { apiRateLimiter, applyRateLimit } from '@/lib/rate-limit'
 import { createWorkoutPlanSchema } from '@/lib/validations/user'
 
 type WorkoutPlanData = {
@@ -186,8 +186,8 @@ export async function POST(req: NextRequest) {
 
   // Rate limiting
   const identifier = session.user.id
-  const { success } = await apiRateLimiter.limit(identifier)
-  if (!success) {
+  const rateResult = await applyRateLimit(apiRateLimiter, identifier)
+  if (!rateResult.success) {
     return NextResponse.json({ error: 'Çok fazla istek. Lütfen bekleyin.' }, { status: 429 })
   }
 
