@@ -42,7 +42,13 @@ jobs:
             "EXERCISEDB_API_KEY=${{ secrets.EXERCISEDB_API_KEY }}" \
             "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" \
             "NEXT_PUBLIC_API_URL=http://${{ secrets.OCI_HOST }}:3000" \
-            > .env
+            "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" \
+            "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" \
+            "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" \
+            "SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+            "UPSTASH_REDIS_REST_URL=${{ secrets.UPSTASH_REDIS_REST_URL }}" \
+            "UPSTASH_REDIS_REST_TOKEN=${{ secrets.UPSTASH_REDIS_REST_TOKEN }}" \
+          > .env
 
           export APP_CONTAINER_NAME=cekuai-app
           export APP_PORT=3000
