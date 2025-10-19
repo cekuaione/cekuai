@@ -14,7 +14,7 @@ type Category = {
   icon: string
   title: string
   description: string
-  href: string | null
+  dashboardHref?: string
   isActive: boolean
   comingSoon?: boolean
 }
@@ -24,14 +24,13 @@ const categories: Category[] = [
     icon: "💪",
     title: "Sport",
     description: "Tailored workout plans, coaching, and wellness tools.",
-    href: "/sport",
+    dashboardHref: "/dashboard/sport/workout-plan",
     isActive: true,
   },
   {
     icon: "🍳",
     title: "Food",
     description: "Recipe generation, meal planning, and nutrition insights.",
-    href: null,
     isActive: false,
     comingSoon: true,
   },
@@ -39,7 +38,6 @@ const categories: Category[] = [
     icon: "💼",
     title: "Business",
     description: "AI workflows for your team and business decisions.",
-    href: null,
     isActive: false,
     comingSoon: true,
   },
@@ -47,7 +45,6 @@ const categories: Category[] = [
     icon: "📚",
     title: "Education",
     description: "Learning resources, study plans, and tutoring support.",
-    href: null,
     isActive: false,
     comingSoon: true,
   },
@@ -134,8 +131,16 @@ export function LandingContent({ isAuthenticated }: LandingContentProps) {
           animate="visible"
           className="mt-20 grid grid-cols-1 gap-6 md:grid-cols-2 xl:mt-24 xl:grid-cols-4"
         >
-          {categories.map((category) => (
-            <motion.div key={category.title} variants={cardVariants}>
+          {categories.map((category) => {
+            const activeHref =
+              category.isActive && category.dashboardHref
+                ? isAuthenticated
+                  ? category.dashboardHref
+                  : `/auth/login?redirect=${encodeURIComponent(category.dashboardHref)}`
+                : null;
+
+            return (
+              <motion.div key={category.title} variants={cardVariants}>
               <Card className="group h-full border border-white/10 bg-white/5 backdrop-blur-sm transition hover:border-blue-500/50">
                 <CardContent className="flex h-full flex-col gap-4 p-6">
                   <div className="flex items-center justify-between">
@@ -151,18 +156,18 @@ export function LandingContent({ isAuthenticated }: LandingContentProps) {
                     <p className="text-sm text-muted-foreground">{category.description}</p>
                   </div>
                   <div className="mt-auto flex items-center justify-between">
-                    {category.isActive && category.href ? (
+                    {activeHref ? (
                       <Button asChild variant="secondary" className="px-4">
-                        <Link href={category.href}>Open</Link>
+                        <Link href={activeHref}>Open</Link>
                       </Button>
                     ) : (
                       <Button variant="outline" className="cursor-not-allowed px-4 text-muted-foreground" disabled>
                         Locked
                       </Button>
                     )}
-                    {category.isActive && category.href ? (
+                    {activeHref ? (
                       <Link
-                        href={category.href}
+                        href={activeHref}
                         className="text-sm font-medium text-blue-300 transition hover:text-blue-100"
                       >
                         View All →
@@ -173,8 +178,9 @@ export function LandingContent({ isAuthenticated }: LandingContentProps) {
                   </div>
                 </CardContent>
               </Card>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </motion.section>
       </div>
     </div>

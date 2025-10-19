@@ -1,37 +1,14 @@
 import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import { auth } from '@/lib/auth-helpers'
-import { getSupabaseUserClient } from '@/lib/supabase/server'
+import { getSupabaseServiceClient } from '@/lib/supabase/server'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import type { PlanData, WorkoutWeek as WorkoutWeekContract } from '@/lib/workout/types'
 
 export const dynamic = 'force-dynamic'
-
-type WorkoutExercise = {
-  name?: string | null
-  sets?: string | null
-  rest?: string | null
-  target?: string | null
-}
-
-type WorkoutDay = {
-  day?: string | null
-  title?: string | null
-  focus?: string | null
-  summary?: string | null
-  exercises?: WorkoutExercise[] | null
-}
-
-type WorkoutWeek = {
-  label?: string | null
-  days?: WorkoutDay[] | null
-}
-
-type WorkoutPlanData = {
-  weeks?: WorkoutWeek[] | null
-}
 
 type PlanRecord = {
   id: string
@@ -41,7 +18,7 @@ type PlanRecord = {
   durationPerDay: number | null
   equipment: string[]
   notes: string | null
-  planData: WorkoutPlanData
+  planData: PlanData
   isActive: boolean | null
   createdAt: string | null
   updatedAt: string | null
@@ -51,7 +28,7 @@ const goalLabels: Record<string, string> = {
   muscle: 'Kas Yapma',
   weight_loss: 'Kilo Verme',
   endurance: 'Dayanıklılık',
-  general: 'Genel Fitness',
+  general_fitness: 'Genel Fitness',
 }
 
 const levelLabels: Record<string, string> = {
@@ -60,17 +37,27 @@ const levelLabels: Record<string, string> = {
   advanced: 'İleri Seviye',
 }
 
-async function getPlan(planId: string): Promise<PlanRecord | null> {
-  const supabase = await getSupabaseUserClient()
+function isPlanData(value: unknown): value is PlanData {
+  if (!value || typeof value !== 'object' || value === null) return false
+  const candidate = value as { weeks?: unknown }
+  return Array.isArray(candidate.weeks)
+}
+
+async function getPlan(planId: string, userId: string): Promise<PlanRecord | null> {
+  const supabase = getSupabaseServiceClient()
   const { data, error } = await supabase
     .from('workout_plans')
     .select(
       'id, user_id, goal, level, days_per_week, duration_per_day, equipment, notes, plan_data, is_active, created_at, updated_at'
     )
     .eq('id', planId)
+    .eq('user_id', userId)
     .single()
 
   if (error || !data) {
+    if (error) {
+      console.error('Failed to load workout plan detail', { planId, userId, message: error.message })
+    }
     return null
   }
 
@@ -82,7 +69,7 @@ async function getPlan(planId: string): Promise<PlanRecord | null> {
     durationPerDay: data.duration_per_day,
     equipment: Array.isArray(data.equipment) ? (data.equipment as string[]) : [],
     notes: data.notes,
-    planData: (data.plan_data as WorkoutPlanData) ?? { weeks: [] },
+    planData: isPlanData(data.plan_data) ? data.plan_data : { weeks: [] },
     isActive: data.is_active,
     createdAt: data.created_at,
     updatedAt: data.updated_at,
@@ -96,7 +83,7 @@ export default async function PlanDetailPage({ params }: { params: Promise<{ id:
     redirect('/auth/signin')
   }
 
-  const plan = await getPlan(id)
+  const plan = await getPlan(id, session.user.id)
   if (!plan) {
     notFound()
   }
@@ -104,12 +91,14 @@ export default async function PlanDetailPage({ params }: { params: Promise<{ id:
   const goal = goalLabels[plan.goal] ?? plan.goal
   const level = levelLabels[plan.level] ?? plan.level
   const equipment = plan.equipment.length > 0 ? plan.equipment : []
-  const weeks = Array.isArray(plan.planData.weeks) ? plan.planData.weeks.filter(Boolean) : []
-  const normalizedWeeks = weeks.map((week, index) => {
-    const label = week?.label?.toString().trim() || `Hafta ${index + 1}`
-    const days = Array.isArray(week?.days) ? week?.days?.filter(Boolean) : []
-    return { label, days: days as WorkoutDay[] }
-  })
+  const weeks = Array.isArray(plan.planData?.weeks) ? (plan.planData.weeks as WorkoutWeekContract[]) : []
+  const normalizedWeeks = weeks
+    .filter(Boolean)
+    .map((week, index) => {
+      const label = week?.label?.toString().trim() || `Hafta ${index + 1}`
+      const days = Array.isArray(week?.days) ? week.days.filter(Boolean) : []
+      return { label, days }
+    })
   const defaultWeekValue = normalizedWeeks[0]?.label
 
   return (
@@ -126,7 +115,7 @@ export default async function PlanDetailPage({ params }: { params: Promise<{ id:
             <Link href="/dashboard/plans">← Planlara Dön</Link>
           </Button>
           <Button asChild>
-            <Link href="/sport/workout-plan">Yeni Plan Oluştur</Link>
+            <Link href="/dashboard/sport/workout-plan">Yeni Plan Oluştur</Link>
           </Button>
         </div>
       </div>

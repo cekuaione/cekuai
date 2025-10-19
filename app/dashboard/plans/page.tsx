@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { getSupabaseUserClient } from '@/lib/supabase/server'
+import { getSupabaseServiceClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -7,14 +7,18 @@ import { auth } from '@/lib/auth-helpers'
 
 export const dynamic = 'force-dynamic'
 
-async function getPlans() {
-  const supabase = await getSupabaseUserClient()
+async function getPlans(userId: string) {
+  const supabase = getSupabaseServiceClient()
   const { data, error } = await supabase
     .from('workout_plans')
     .select('id, goal, level, is_active, updated_at')
+    .eq('user_id', userId)
     .order('updated_at', { ascending: false })
-  if (error) throw new Error(error.message)
-  return data
+  if (error) {
+    console.error('Failed to load workout plans list', { userId, message: error.message })
+    throw new Error(error.message)
+  }
+  return data ?? []
 }
 
 export default async function PlansPage() {
@@ -22,7 +26,7 @@ export default async function PlansPage() {
   const userId = session?.user?.id
   if (!userId) return null
 
-  const plans = await getPlans()
+  const plans = await getPlans(userId)
   const active = plans.filter((p) => p.is_active)
   const archived = plans.filter((p) => !p.is_active)
 
@@ -34,7 +38,7 @@ export default async function PlansPage() {
           <p className="mt-2 text-gray-400">Tüm antrenman planlarınızı görüntüleyin ve yönetin</p>
         </div>
         <Button asChild size="lg">
-          <Link href="/sport/workout-plan">+ Yeni Plan Oluştur</Link>
+          <Link href="/dashboard/sport/workout-plan">+ Yeni Plan Oluştur</Link>
         </Button>
       </div>
       <Tabs defaultValue="active">
@@ -100,4 +104,3 @@ export default async function PlansPage() {
     </div>
   )
 }
-

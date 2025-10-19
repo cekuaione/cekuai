@@ -4,6 +4,25 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   // Standalone output required for Docker runtime (provides .next/standalone)
   output: "standalone",
+  
+  // Allow external images from ExerciseDB
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'v2.exercisedb.io',
+        pathname: '/image/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn.exercisedb.dev',
+      },
+      {
+        protocol: 'https',
+        hostname: 'exercisedb.io',
+      },
+    ],
+  },
 };
 
 export default withSentryConfig(nextConfig, {

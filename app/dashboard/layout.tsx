@@ -1,19 +1,16 @@
-import { redirect } from "next/navigation"
-import { auth } from "@/lib/auth-helpers"
-import { PublicLayout } from "@/components/layout/public-layout"
-import { DashboardNav } from "@/components/dashboard/dashboard-nav"
+import { redirect } from "next/navigation";
+import type { ReactNode } from "react";
+import { auth } from "@/lib/auth-helpers";
+import { DashboardShell } from "./dashboard-shell";
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const session = await auth()
+export default async function DashboardLayout({ children }: { children: ReactNode }) {
+  const session = await auth();
+
   if (!session?.user) {
-    redirect("/auth/signin")
+    redirect(`/auth/login?redirect=${encodeURIComponent("/dashboard")}`);
   }
 
-  return (
-    <PublicLayout>
-      <DashboardNav />
-      <div className="container mx-auto px-4 py-8">{children}</div>
-    </PublicLayout>
-  )
-}
+  const userName = session.user.name ?? session.user.email ?? undefined;
 
+  return <DashboardShell userName={userName}>{children}</DashboardShell>;
+}

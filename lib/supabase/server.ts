@@ -29,10 +29,16 @@ export function getSupabaseServiceClient(): SupabaseClient<Database> {
 // User-scoped client - respects RLS policies using session cookies
 export async function getSupabaseUserClient(): Promise<SupabaseClient<Database>> {
   const cookieStore = await cookies()
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  if (!url || !anonKey) {
+    throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY env vars.')
+  }
 
   return createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    url,
+    anonKey,
     {
       cookies: {
         get(name: string) {
@@ -50,5 +56,4 @@ export async function getSupabaseUserClient(): Promise<SupabaseClient<Database>>
 }
 
 export default getSupabaseServiceClient
-
 

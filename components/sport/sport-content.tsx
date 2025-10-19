@@ -14,7 +14,7 @@ type SubCategory = {
   icon: string
   title: string
   description: string
-  href: string | null
+  dashboardHref?: string
   isActive: boolean
   comingSoon?: boolean
 }
@@ -24,14 +24,13 @@ const subCategories: SubCategory[] = [
     icon: "🏋️",
     title: "Egzersiz Programı",
     description: "Kişiselleştirilmiş antrenman planı",
-    href: "/sport/workout-plan",
+    dashboardHref: "/dashboard/sport/workout-plan",
     isActive: true,
   },
   {
     icon: "🥗",
     title: "Diyet Programı",
     description: "Beslenme ve kalori planı",
-    href: null,
     isActive: false,
     comingSoon: true,
   },
@@ -39,7 +38,6 @@ const subCategories: SubCategory[] = [
     icon: "⚽",
     title: "Takım & Sporcu Haberleri",
     description: "Favori takımlarınızdan haberler",
-    href: null,
     isActive: false,
     comingSoon: true,
   },
@@ -47,7 +45,6 @@ const subCategories: SubCategory[] = [
     icon: "🛒",
     title: "Ekipman Fiyatları",
     description: "En iyi fiyatları bul",
-    href: null,
     isActive: false,
     comingSoon: true,
   },
@@ -117,47 +114,54 @@ export function SportContent({ isAuthenticated }: SportContentProps) {
           animate="visible"
           className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2"
         >
-          {subCategories.map((subCategory) => (
-            <motion.div key={subCategory.title} variants={cardVariants}>
-              {subCategory.isActive && subCategory.href ? (
-                <Link href={subCategory.href} className="block h-full">
-                  <Card className="h-full border border-white/10 bg-white/5 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-blue-500/50 hover:shadow-2xl">
-                    <CardContent className="flex h-full flex-col gap-6 p-8">
+          {subCategories.map((subCategory) => {
+            const rawHref = (subCategory as { href?: unknown }).href;
+            const href = typeof rawHref === "string" ? rawHref : undefined;
+            const isComingSoon = Boolean((subCategory as { comingSoon?: boolean }).comingSoon);
+            const isInteractive = subCategory.isActive && href;
+
+            return (
+              <motion.div key={subCategory.title} variants={cardVariants}>
+                {isInteractive ? (
+                  <Link href={href!} className="block h-full">
+                    <Card className="h-full border border-white/10 bg-white/5 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-blue-500/50 hover:shadow-2xl">
+                      <CardContent className="flex h-full flex-col gap-6 p-8">
+                        <div className="text-5xl">{subCategory.icon}</div>
+                        <div className="space-y-3">
+                          <h3 className="text-2xl font-semibold text-white">{subCategory.title}</h3>
+                          <p className="text-base text-muted-foreground">{subCategory.description}</p>
+                        </div>
+                        <Button className="mt-auto w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700">
+                          Planı Oluştur →
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ) : (
+                  <Card className="h-full border border-white/10 bg-white/[0.04] backdrop-blur-sm">
+                    <CardContent className="relative flex h-full flex-col gap-6 p-8 text-center">
+                      {isComingSoon && (
+                        <Badge
+                          variant="outline"
+                          className="absolute right-6 top-6 border-blue-500/40 bg-blue-500/10 text-blue-300"
+                        >
+                          Yakında
+                        </Badge>
+                      )}
                       <div className="text-5xl">{subCategory.icon}</div>
                       <div className="space-y-3">
                         <h3 className="text-2xl font-semibold text-white">{subCategory.title}</h3>
                         <p className="text-base text-muted-foreground">{subCategory.description}</p>
                       </div>
-                      <Button className="mt-auto w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700">
-                        Planı Oluştur →
-                      </Button>
+                      <p className="mt-auto text-sm text-muted-foreground">
+                        Yeni özellikler için topluluğa katılın.
+                      </p>
                     </CardContent>
                   </Card>
-                </Link>
-              ) : (
-                <Card className="h-full border border-white/10 bg-white/[0.04] backdrop-blur-sm">
-                  <CardContent className="relative flex h-full flex-col gap-6 p-8 text-center">
-                    {subCategory.comingSoon && (
-                      <Badge
-                        variant="outline"
-                        className="absolute right-6 top-6 border-blue-500/40 bg-blue-500/10 text-blue-300"
-                      >
-                        Yakında
-                      </Badge>
-                    )}
-                    <div className="text-5xl">{subCategory.icon}</div>
-                    <div className="space-y-3">
-                      <h3 className="text-2xl font-semibold text-white">{subCategory.title}</h3>
-                      <p className="text-base text-muted-foreground">{subCategory.description}</p>
-                    </div>
-                    <p className="mt-auto text-sm text-muted-foreground">
-                      Yeni özellikler için topluluğa katılın.
-                    </p>
-                  </CardContent>
-                </Card>
-              )}
-            </motion.div>
-          ))}
+                )}
+              </motion.div>
+            );
+          })}
         </motion.div>
       </div>
     </div>
