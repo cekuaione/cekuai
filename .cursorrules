@@ -1,0 +1,278 @@
+# Cursor AI Rules for CEKUAI Project
+
+## Documentation Discipline
+
+### Core Documentation Files
+The project maintains 6 core documentation files in `/docs`:
+- **CHANGELOG.md** - All changes and version history
+- **SPORT_FEATURE.md** - Workout plan feature documentation
+- **API_INTEGRATION.md** - Supabase, n8n, and API details
+- **UI_COMPONENTS.md** - Component library and design tokens
+- **DEPLOYMENT_CHECKLIST.md** - Deployment procedures
+- **TROUBLESHOOTING.md** - Debug guide and common issues
+
+ONLY required explanations in Output, keep it small and clear.
+
+### Documentation Rules
+
+#### ✅ REQUIRED Actions
+- **ALWAYS** update CHANGELOG.md for every significant change
+- **ALWAYS** update relevant feature doc when adding features
+- **ALWAYS** update UI_COMPONENTS.md when creating new components
+- **ALWAYS** update TROUBLESHOOTING.md when fixing bugs
+- **ALWAYS** keep "Last Updated" date current
+- **ALWAYS** reference existing docs instead of duplicating
+
+#### ❌ PROHIBITED Actions
+- **NEVER** create new MD files without explicit approval
+- **NEVER** create IMPLEMENTATION.md, CHANGES.md, or similar
+- **NEVER** duplicate documentation across files
+- **NEVER** leave outdated information in docs
+- **NEVER** create temporary documentation files
+
+### Update Mapping
+
+When making changes, update these files:
+
+| Change Type | Files to Update |
+|-------------|-----------------|
+| New feature | CHANGELOG.md, SPORT_FEATURE.md |
+| New component | CHANGELOG.md, UI_COMPONENTS.md |
+| API changes | CHANGELOG.md, API_INTEGRATION.md |
+| Bug fix | CHANGELOG.md, TROUBLESHOOTING.md |
+| Deployment | CHANGELOG.md, DEPLOYMENT_CHECKLIST.md |
+| Any change | CHANGELOG.md |
+
+### Documentation Format
+
+#### CHANGELOG.md Format
+```markdown
+## [Version] - YYYY-MM-DD
+
+### Added
+- New features
+
+### Changed
+- Modified features
+
+### Removed
+- Deprecated features
+
+### Fixed
+- Bug fixes
+```
+
+#### Component Documentation Format
+```markdown
+### ComponentName
+**File:** path/to/component.tsx
+
+**Purpose:** Brief description
+
+**Props:**
+\`\`\`typescript
+interface ComponentProps {
+  // props
+}
+\`\`\`
+
+**Usage:**
+\`\`\`tsx
+<ComponentName prop="value" />
+\`\`\`
+```
+
+### Code Style
+
+#### TypeScript
+- Use strict mode
+- No `any` types
+- Define interfaces for all props
+- Use type inference where possible
+
+#### React
+- Use functional components
+- Use hooks for state management
+- Memoize expensive computations
+- Use proper key props
+
+#### File Naming
+- Components: PascalCase (e.g., `ChatContainer.tsx`)
+- Hooks: camelCase with `use` prefix (e.g., `useChatFlow.ts`)
+- Utilities: camelCase (e.g., `rateLimit.ts`)
+- Constants: UPPER_SNAKE_CASE (e.g., `AI_MESSAGES.ts`)
+
+### Git Workflow
+
+#### Commit Messages
+- Use conventional commits format
+- Prefix with type: feat, fix, docs, style, refactor, test, chore
+- Examples:
+  - `feat: add chat interface for workout plans`
+  - `fix: resolve duplicate message issue`
+  - `docs: update API integration guide`
+
+#### Branch Naming
+- `feature/description` - New features
+- `fix/description` - Bug fixes
+- `docs/description` - Documentation updates
+- `refactor/description` - Code refactoring
+
+### Testing
+
+#### Before Committing
+- [ ] All TypeScript errors resolved
+- [ ] All ESLint warnings addressed
+- [ ] Manual testing completed
+- [ ] CHANGELOG.md updated
+- [ ] Relevant docs updated
+
+#### Testing Checklist
+- [ ] Cross-browser testing (Chrome, Firefox, Safari, Edge)
+- [ ] Mobile responsive testing (iOS, Android)
+- [ ] Accessibility testing (WCAG AA)
+- [ ] Performance testing (Lighthouse)
+- [ ] API integration testing
+
+### Environment Variables
+
+#### Required Variables
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `NEXTAUTH_URL`
+- `NEXTAUTH_SECRET`
+- `N8N_URL`
+- `N8N_API_KEY`
+- `UPSTASH_REDIS_REST_URL`
+- `UPSTASH_REDIS_REST_TOKEN`
+
+#### Never Commit
+- `.env.local`
+- `.env.production`
+- API keys
+- Secrets
+- Credentials
+
+### Performance
+
+#### Optimization Rules
+- Use `useCallback` for functions passed to children
+- Use `useMemo` for expensive computations
+- Lazy load heavy components
+- Optimize images with `next/image`
+- Use CSS animations over JavaScript
+- Minimize bundle size
+
+#### Performance Targets
+- First Contentful Paint: < 1.8s
+- Time to Interactive: < 3.8s
+- Cumulative Layout Shift: < 0.1
+- Largest Contentful Paint: < 2.5s
+
+### Security
+
+#### Security Rules
+- Never expose API keys in client code
+- Use environment variables for secrets
+- Validate all user input
+- Use parameterized queries for database
+- Implement rate limiting
+- Use HTTPS in production
+- Set secure cookie flags
+- Implement CSRF protection
+
+### Accessibility
+
+#### WCAG Compliance
+- All images have alt text
+- All buttons have labels
+- Color contrast meets AA standards
+- Keyboard navigation works
+- Screen reader friendly
+- Focus indicators visible
+- Touch targets minimum 44x44px
+
+### Error Handling
+
+#### Error Handling Rules
+- Always handle errors gracefully
+- Show user-friendly error messages
+- Log errors to Sentry
+- Don't expose sensitive information
+- Provide fallback UI
+- Implement retry logic for transient failures
+
+### Code Review
+
+#### Review Checklist
+- [ ] Code follows project conventions
+- [ ] Documentation updated
+- [ ] Tests added/updated
+- [ ] No security vulnerabilities
+- [ ] Performance acceptable
+- [ ] Accessibility maintained
+- [ ] Error handling implemented
+
+### Project Structure
+
+```
+/Users/ceku/Developer/Github/cekuai/
+├── app/                    # Next.js app directory
+│   ├── api/               # API routes
+│   ├── auth/              # Authentication pages
+│   ├── dashboard/         # Dashboard pages
+│   ├── sport/             # Sport feature pages
+│   └── ...                # Other pages
+├── components/            # React components
+│   ├── ui/               # UI library components
+│   └── ...               # Feature components
+├── lib/                   # Utility functions
+│   ├── supabase/         # Supabase client
+│   └── ...               # Other utilities
+├── docs/                  # Documentation
+├── public/                # Static assets
+└── ...                    # Config files
+```
+
+### Getting Help
+
+#### Resources
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Supabase Documentation](https://supabase.com/docs)
+- [n8n Documentation](https://docs.n8n.io)
+- Project documentation in `/docs`
+
+#### Support
+- Check TROUBLESHOOTING.md first
+- Search existing GitHub issues
+- Ask in team chat
+- Create new issue if needed
+
+---
+
+## Output Guidelines
+
+### Keep Responses Concise
+- **Brief confirmation** of what was done
+- Avoid unnecessary explanations
+- No repeating what was already understood
+- Only explain complex decisions
+- Skip obvious details
+
+### Format
+- ✅ "Feature X implemented"
+- ✅ "Bug Y fixed"
+- ❌ Long explanations of obvious changes
+- ❌ Repeating user requirements
+
+### When to Be Detailed
+- Complex architectural decisions
+- Non-obvious solutions
+- Security considerations
+- Performance optimizations
+
+---
+
+**Remember:** Keep documentation in sync with code. Update docs as you code, not after.
+

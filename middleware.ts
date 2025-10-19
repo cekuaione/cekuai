@@ -2,7 +2,7 @@ import { withAuth } from 'next-auth/middleware'
 import { NextResponse } from 'next/server'
 
 export default withAuth(
-  function middleware(req) {
+  function middleware() {
     return NextResponse.next()
   },
   {
@@ -11,6 +11,9 @@ export default withAuth(
         // Require a valid session token for protected routes
         return !!token
       },
+    },
+    pages: {
+      signIn: '/auth/login',
     },
   }
 )
@@ -23,5 +26,3 @@ export const config = {
     '/api/openai/:path*',
   ],
 }
-
-

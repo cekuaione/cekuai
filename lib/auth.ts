@@ -34,7 +34,9 @@ if (!NEXTAUTH_SECRET) {
 }
 
 if (!NEXT_PUBLIC_SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY || !NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-  throw new Error('NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, and NEXT_PUBLIC_SUPABASE_ANON_KEY are required')
+  console.warn(
+    '[NextAuth] Supabase environment variables are not fully configured. The app will fail at runtime without NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, and NEXT_PUBLIC_SUPABASE_ANON_KEY.'
+  )
 }
 
 const providers: NextAuthOptions['providers'] = []
@@ -62,10 +64,11 @@ providers.push(
         throw new Error('Çok fazla giriş denemesi. 15 dakika sonra tekrar deneyin.')
       }
 
-      const supabase = createClient(
-        NEXT_PUBLIC_SUPABASE_URL!,
-        NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      )
+      if (!NEXT_PUBLIC_SUPABASE_URL || !NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+        throw new Error('Supabase environment variables are not configured.')
+      }
+
+      const supabase = createClient(NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
       const { data, error } = await supabase.auth.signInWithPassword({
         email: credentials.email,

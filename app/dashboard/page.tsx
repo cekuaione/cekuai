@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { getSupabaseUserClient } from '@/lib/supabase/server'
+import { getSupabaseServiceClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { auth } from '@/lib/auth-helpers'
@@ -11,7 +11,7 @@ export default async function DashboardHomePage() {
   const userId = session?.user?.id
   if (!userId) return null
 
-  const supabase = await getSupabaseUserClient()
+  const supabase = getSupabaseServiceClient()
   let totalPlans = 0
   let activePlans = 0
   let lastActivity: string | null = null
@@ -27,6 +27,8 @@ export default async function DashboardHomePage() {
     activePlans = data.filter((p) => p.is_active).length
     lastActivity = data[0]?.updated_at ?? null
     recentPlans = data.slice(0, 5)
+  } else if (error) {
+    console.error('Failed to load workout plans for dashboard', { userId, message: error.message })
   }
 
   return (
@@ -37,7 +39,7 @@ export default async function DashboardHomePage() {
           <p className="mt-2 text-gray-400">Gününe hareket katmaya hazır mısın?</p>
         </div>
         <Button asChild size="lg">
-          <Link href="/sport/workout-plan">+ Yeni Plan Oluştur</Link>
+          <Link href="/dashboard/sport/workout-plan">+ Yeni Plan Oluştur</Link>
         </Button>
       </div>
 
@@ -96,5 +98,3 @@ export default async function DashboardHomePage() {
     </div>
   )
 }
-
-
