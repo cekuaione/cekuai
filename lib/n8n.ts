@@ -7,14 +7,31 @@ export type N8nError = {
 };
 
 const WEBHOOK_TIMEOUT = 45_000; // 45 seconds
-const DEFAULT_WEBHOOK_URL = "https://cekuai.duckdns.org/webhook-test/workout-plan-generate";
+const DEFAULT_WEBHOOK_URL = "https://cekuai.duckdns.org/webhook/workout-plan-generate";
+
+type ResolvedWebhookUrl = {
+  url: string;
+  fromEnv: boolean;
+};
+
+function resolveWebhookUrl(): ResolvedWebhookUrl {
+  const raw = process.env.N8N_WEBHOOK_URL?.trim();
+
+  if (raw) {
+    return { url: raw, fromEnv: true };
+  }
+
+  return { url: DEFAULT_WEBHOOK_URL, fromEnv: false };
+}
 
 /**
  * Generate workout plan via n8n webhook.
  * @throws N8nError when the webhook call fails or returns an error response.
  */
-export async function generateWorkoutPlan(payload: WorkoutPlanRequest): Promise<WorkoutPlanResponse> {
-  const webhookUrl = process.env.N8N_WEBHOOK_URL ?? DEFAULT_WEBHOOK_URL;
+export async function generateWorkoutPlan(
+  payload: WorkoutPlanRequest,
+): Promise<WorkoutPlanResponse> {
+  const { url: webhookUrl, fromEnv } = resolveWebhookUrl();
 
   if (!webhookUrl) {
     throw new Error("N8N_WEBHOOK_URL environment variable is not configured");
@@ -26,6 +43,7 @@ export async function generateWorkoutPlan(payload: WorkoutPlanRequest): Promise<
   try {
     console.log("📡 [GENERATE] Sending webhook request", {
       url: webhookUrl,
+      hasWebhookEnv: fromEnv,
       payloadPreview: {
         userId: payload.userId,
         planId: payload.planId,
