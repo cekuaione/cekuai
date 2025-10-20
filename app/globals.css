@@ -8,6 +8,12 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-surface-muted: var(--surface-muted);
+  --color-surface-strong: var(--surface-strong);
+  --color-link: var(--link);
+  --color-link-hover: var(--link-hover);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -21,6 +27,14 @@
   --color-chart-3: var(--chart-3);
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
+  --color-sport: var(--sport-accent);
+  --color-sport-soft: var(--sport-soft);
+  --color-investing: var(--investing-accent);
+  --color-investing-soft: var(--investing-soft);
+  --color-business: var(--business-accent);
+  --color-business-soft: var(--business-soft);
+  --color-education: var(--education-accent);
+  --color-education-soft: var(--education-soft);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -47,71 +61,110 @@
   --radius: 0.625rem;
   --font-geist-sans: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
   --font-geist-mono: "Fira Code", "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+
+  /* Notion-inspired Light Mode */
+  --background: #f6f5f1;
+  --surface-muted: #eeede7;
+  --surface-strong: #e4e2dc;
+  --text-primary: #1f2937;
+  --text-secondary: #6b7280;
+  --foreground: var(--text-primary);
+  --card: #faf9f5;
+  --card-foreground: var(--text-primary);
+  --popover: #ffffff;
+  --popover-foreground: var(--text-primary);
+  --primary: #3b82f6;
+  --primary-foreground: #f8fafc;
+  --secondary: #e7ebf0;
+  --secondary-foreground: var(--text-primary);
+  --muted: #ecebe7;
+  --muted-foreground: var(--text-secondary);
+  --accent: #e6ecf3;
+  --accent-foreground: var(--text-primary);
+  --destructive: #dc2626;
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #60a5fa;
+  --link: #2563eb;
+  --link-hover: #1d4ed8;
+  
+  /* Category Accent Colors - Light Mode */
+  --chart-1: #f97316;
+  --chart-2: #10b981;
+  --chart-3: #3b82f6;
+  --chart-4: #8b5cf6;
+  --chart-5: #fb923c;
+  --sport-accent: #f97316;
+  --sport-soft: #fff3e6;
+  --investing-accent: #10b981;
+  --investing-soft: #e6fff5;
+  --business-accent: #3b82f6;
+  --business-soft: #e8f2ff;
+  --education-accent: #8b5cf6;
+  --education-soft: #f3ebff;
+  
+  /* Sidebar - Light Mode */
+  --sidebar: #f4f3ef;
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary: #3b82f6;
+  --sidebar-primary-foreground: #f8fafc;
+  --sidebar-accent: #e6ecf3;
+  --sidebar-accent-foreground: var(--text-primary);
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #60a5fa;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* Notion-inspired Dark Mode */
+  --background: #0f172a;
+  --surface-muted: #162238;
+  --surface-strong: #1c2840;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --foreground: var(--text-primary);
+  --card: #1e293b;
+  --card-foreground: var(--text-primary);
+  --popover: #1e293b;
+  --popover-foreground: var(--text-primary);
+  --primary: #60a5fa;
+  --primary-foreground: #0f172a;
+  --secondary: #1b2436;
+  --secondary-foreground: var(--text-primary);
+  --muted: #1b2436;
+  --muted-foreground: var(--text-secondary);
+  --accent: #23324a;
+  --accent-foreground: var(--text-primary);
+  --destructive: #f87171;
+  --border: #273247;
+  --input: #273247;
+  --ring: #93c5fd;
+  --link: #60a5fa;
+  --link-hover: #93c5fd;
+  
+  /* Category Accent Colors - Dark Mode */
+  --chart-1: #fb923c;
+  --chart-2: #34d399;
+  --chart-3: #60a5fa;
+  --chart-4: #a78bfa;
+  --chart-5: #f97316;
+  --sport-accent: #fb923c;
+  --sport-soft: #3d2a26;
+  --investing-accent: #34d399;
+  --investing-soft: #1f3a2f;
+  --business-accent: #60a5fa;
+  --business-soft: #1f2d46;
+  --education-accent: #a78bfa;
+  --education-soft: #292445;
+  
+  /* Sidebar - Dark Mode */
+  --sidebar: #142135;
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary: #34d399;
+  --sidebar-primary-foreground: #052e16;
+  --sidebar-accent: #1d2b42;
+  --sidebar-accent-foreground: var(--text-primary);
+  --sidebar-border: #1f2c43;
+  --sidebar-ring: #93c5fd;
 }
 
 @layer base {
@@ -120,5 +173,8 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  a {
+    @apply text-link transition-colors hover:text-link-hover;
   }
 }

@@ -216,6 +216,16 @@ export interface CryptoAssessmentDisplay {
 }
 
 /**
+ * Aggregated statistics for investing dashboard
+ */
+export interface InvestingDashboardStats {
+  totalReady: number;
+  monthlyTotal: number;
+  decisionCounts: Record<InvestmentDecision, number>;
+  averageConfidence: number | null;
+}
+
+/**
  * Loading states for async operations
  */
 export interface AssessmentLoadingStates {

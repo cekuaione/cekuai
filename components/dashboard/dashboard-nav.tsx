@@ -14,7 +14,7 @@ export function DashboardNav() {
   const pathname = usePathname()
 
   return (
-    <div className="border-b border-slate-800 bg-slate-900/50">
+    <div className="border-b border-border bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/70">
       <div className="container mx-auto px-4">
         <nav className="flex gap-1 overflow-x-auto">
           {navItems.map((item) => {
@@ -26,8 +26,8 @@ export function DashboardNav() {
                 className={cn(
                   "flex items-center gap-2 whitespace-nowrap border-b-2 px-4 py-3 text-sm font-medium transition-colors",
                   isActive
-                    ? "border-blue-500 text-white"
-                    : "border-transparent text-gray-400 hover:border-gray-700 hover:text-gray-300"
+                    ? "border-primary text-text-primary"
+                    : "border-transparent text-text-secondary hover:border-surface-strong hover:text-text-primary"
                 )}
               >
                 <span>{item.icon}</span>
@@ -40,4 +40,3 @@ export function DashboardNav() {
     </div>
   )
 }
-

@@ -74,27 +74,27 @@ const cardVariants = {
 
 export function InvestingContent({ isAuthenticated }: InvestingContentProps) {
   return (
-    <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
+    <div className="bg-background text-text-primary">
       <div className="mx-auto w-full max-w-6xl px-4 pb-20 pt-16 md:px-6">
-        <div className="mb-8 flex items-center gap-2 text-sm text-muted-foreground">
-          <Link href="/" className="transition hover:text-white">
+        <div className="mb-8 flex items-center gap-2 text-sm text-text-secondary">
+          <Link href="/" className="transition hover:text-text-primary">
             Home
           </Link>
-          <span className="text-muted-foreground/70">›</span>
-          <span className="text-white/80">Investing</span>
+          <span className="text-text-secondary/70">›</span>
+          <span className="text-investing">Investing</span>
         </div>
 
         {!isAuthenticated && (
-          <div className="mb-8 flex flex-col gap-3 rounded-2xl border border-green-500/30 bg-green-500/10 px-6 py-5 text-sm text-green-100 md:flex-row md:items-center md:justify-between">
+          <div className="mb-8 flex flex-col gap-3 rounded-2xl border border-investing/40 bg-investing-soft/70 px-6 py-5 text-sm text-investing md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="font-medium text-green-200">Sign up to track your portfolio</p>
-              <p className="text-green-200/80">
+              <p className="font-medium text-investing">Sign up to track your portfolio</p>
+              <p className="text-investing/80">
                 Kaydolduğunuzda yatırım planlarınızı kaydedip istediğiniz yerde erişebilirsiniz.
               </p>
             </div>
             <Button
               asChild
-              className="bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700"
+              className="bg-investing px-6 py-2 text-background hover:bg-investing/90"
             >
               <Link href="/auth/signup">Get Started</Link>
             </Button>
@@ -102,8 +102,8 @@ export function InvestingContent({ isAuthenticated }: InvestingContentProps) {
         )}
 
         <div className="text-center md:text-left">
-          <h1 className="text-4xl font-bold md:text-5xl">💰 Investing Intelligence</h1>
-          <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+          <h1 className="text-4xl font-bold text-text-primary md:text-5xl">💰 Investing Intelligence</h1>
+          <p className="mt-4 max-w-2xl text-lg text-text-secondary">
             Kripto risk değerlendirmesi yapın, portföy analizi gerçekleştirin ve akıllı yatırım kararları alın.
           </p>
         </div>
@@ -124,36 +124,36 @@ export function InvestingContent({ isAuthenticated }: InvestingContentProps) {
               <motion.div key={subCategory.title} variants={cardVariants}>
                 {isInteractive ? (
                   <Link href={href!} className="block h-full">
-                    <Card className="h-full border border-white/10 bg-white/5 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:border-green-500/50 hover:shadow-2xl">
+                    <Card className="h-full border border-investing/30 bg-card shadow-sm shadow-surface-muted/40 transition duration-300 hover:-translate-y-1 hover:border-investing hover:shadow-lg">
                       <CardContent className="flex h-full flex-col gap-6 p-8">
                         <div className="text-5xl">{subCategory.icon}</div>
                         <div className="space-y-3">
-                          <h3 className="text-2xl font-semibold text-white">{subCategory.title}</h3>
-                          <p className="text-base text-muted-foreground">{subCategory.description}</p>
+                          <h3 className="text-2xl font-semibold text-text-primary">{subCategory.title}</h3>
+                          <p className="text-base text-text-secondary">{subCategory.description}</p>
                         </div>
-                        <Button className="mt-auto w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:from-green-600 hover:to-emerald-700">
+                        <Button className="mt-auto w-full bg-investing text-background hover:bg-investing/90">
                           Başla →
                         </Button>
                       </CardContent>
                     </Card>
                   </Link>
                 ) : (
-                  <Card className="h-full border border-white/10 bg-white/[0.04] backdrop-blur-sm">
+                  <Card className="h-full border border-border/60 bg-surface-muted/80 shadow-sm">
                     <CardContent className="relative flex h-full flex-col gap-6 p-8 text-center">
                       {isComingSoon && (
                         <Badge
                           variant="outline"
-                          className="absolute right-6 top-6 border-green-500/40 bg-green-500/10 text-green-300"
+                          className="absolute right-6 top-6 border-investing/40 bg-investing-soft/70 text-investing"
                         >
                           Yakında
                         </Badge>
                       )}
                       <div className="text-5xl">{subCategory.icon}</div>
                       <div className="space-y-3">
-                        <h3 className="text-2xl font-semibold text-white">{subCategory.title}</h3>
-                        <p className="text-base text-muted-foreground">{subCategory.description}</p>
+                        <h3 className="text-2xl font-semibold text-text-primary">{subCategory.title}</h3>
+                        <p className="text-base text-text-secondary">{subCategory.description}</p>
                       </div>
-                      <p className="mt-auto text-sm text-muted-foreground">
+                      <p className="mt-auto text-sm text-text-secondary">
                         Yeni özellikler için topluluğa katılın.
                       </p>
                     </CardContent>
@@ -167,4 +167,3 @@ export function InvestingContent({ isAuthenticated }: InvestingContentProps) {
     </div>
   )
 }
-

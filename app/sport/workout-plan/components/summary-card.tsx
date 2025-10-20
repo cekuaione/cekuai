@@ -57,19 +57,19 @@ export function SummaryCard({
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="mt-2 rounded-2xl border-2 border-purple-600/30 bg-slate-800/40 p-4 shadow-lg shadow-purple-900/30"
+      className="mt-2 rounded-2xl border-2 border-sport/50 bg-sport-soft p-4 shadow-lg shadow-sport/30"
     >
       <div className="mb-4 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="text-lg">📋</span>
-          <h3 className="text-sm font-semibold text-purple-200">Seçimlerinin Özeti</h3>
+          <h3 className="text-sm font-semibold text-sport">Seçimlerinin Özeti</h3>
         </div>
         {onConfirm && (
           <button
             type="button"
             onClick={onConfirm}
             disabled={isLoading || confirmDisabled}
-            className="rounded-xl bg-gradient-to-r from-purple-600 via-fuchsia-600 to-purple-700 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-purple-800/40 transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-xl bg-sport px-4 py-2 text-sm font-semibold text-background shadow-lg shadow-sport/30 transition hover:bg-sport/90 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {isLoading ? "Hazırlanıyor..." : "AI Planını Oluştur"}
           </button>
@@ -80,20 +80,20 @@ export function SummaryCard({
         {fields.map((field) => (
           <div
             key={field.key}
-            className="flex items-start justify-between gap-3 rounded-xl border border-white/5 bg-black/30 px-3 py-2"
+            className="flex items-start justify-between gap-3 rounded-xl border border-border/60 bg-card/80 px-3 py-2"
           >
             <div className="flex flex-1 items-start gap-2">
-              <span className="text-gray-400">{field.icon}</span>
+              <span className="text-sport">{field.icon}</span>
               <div>
-                <span className="text-gray-400">{field.label}: </span>
-                <span className="text-white">{field.value}</span>
+                <span className="text-text-secondary">{field.label}: </span>
+                <span className="text-text-primary">{field.value}</span>
               </div>
             </div>
             {onEdit && (
               <button
                 type="button"
                 onClick={() => handleEdit(field.key)}
-                className="rounded-lg border border-purple-500/40 bg-purple-500/10 px-2 py-1 text-xs font-medium text-purple-100 transition hover:border-purple-400 hover:bg-purple-500/20"
+                className="rounded-lg border border-sport/40 bg-sport-soft px-2 py-1 text-xs font-medium text-sport transition hover:border-sport hover:bg-sport-soft/80"
               >
                 Düzenle
               </button>

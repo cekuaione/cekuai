@@ -13,10 +13,10 @@ export function TypingIndicator() {
       <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-600 flex items-center justify-center p-1">
         💰
       </div>
-      <div className="bg-green-900/30 border border-green-800/30 rounded-2xl rounded-tl-sm px-4 py-3">
+      <div className="bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800/30 rounded-2xl rounded-tl-sm px-4 py-3">
         <div className="flex gap-1">
           <motion.div
-            className="w-2 h-2 rounded-full bg-gray-400"
+            className="w-2 h-2 rounded-full bg-green-600 dark:bg-gray-400"
             animate={{
               y: [0, -8, 0],
             }}
@@ -27,7 +27,7 @@ export function TypingIndicator() {
             }}
           />
           <motion.div
-            className="w-2 h-2 rounded-full bg-gray-400"
+            className="w-2 h-2 rounded-full bg-green-600 dark:bg-gray-400"
             animate={{
               y: [0, -8, 0],
             }}
@@ -38,7 +38,7 @@ export function TypingIndicator() {
             }}
           />
           <motion.div
-            className="w-2 h-2 rounded-full bg-gray-400"
+            className="w-2 h-2 rounded-full bg-green-600 dark:bg-gray-400"
             animate={{
               y: [0, -8, 0],
             }}

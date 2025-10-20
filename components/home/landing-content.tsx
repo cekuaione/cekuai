@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
+import clsx from "clsx"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -17,6 +19,65 @@ type Category = {
   dashboardHref?: string
   isActive: boolean
   comingSoon?: boolean
+}
+
+const CATEGORY_STYLES: Record<
+  string,
+  {
+    cardBg: string
+    cardBorder: string
+    title: string
+    link: string
+    badgeBg: string
+    badgeBorder: string
+    badgeText: string
+  }
+> = {
+  Sport: {
+    cardBg: "bg-sport-soft/70",
+    cardBorder: "border-sport/40",
+    title: "text-sport",
+    link: "text-sport",
+    badgeBg: "bg-sport-soft",
+    badgeBorder: "border-sport/40",
+    badgeText: "text-sport",
+  },
+  Investing: {
+    cardBg: "bg-investing-soft/70",
+    cardBorder: "border-investing/40",
+    title: "text-investing",
+    link: "text-investing",
+    badgeBg: "bg-investing-soft",
+    badgeBorder: "border-investing/40",
+    badgeText: "text-investing",
+  },
+  Food: {
+    cardBg: "bg-surface-muted/80",
+    cardBorder: "border-border/60",
+    title: "text-text-primary",
+    link: "text-text-secondary",
+    badgeBg: "bg-surface-muted",
+    badgeBorder: "border-border",
+    badgeText: "text-text-secondary",
+  },
+  Business: {
+    cardBg: "bg-business-soft/70",
+    cardBorder: "border-business/40",
+    title: "text-business",
+    link: "text-business",
+    badgeBg: "bg-business-soft",
+    badgeBorder: "border-business/40",
+    badgeText: "text-business",
+  },
+  Education: {
+    cardBg: "bg-education-soft/70",
+    cardBorder: "border-education/40",
+    title: "text-education",
+    link: "text-education",
+    badgeBg: "bg-education-soft",
+    badgeBorder: "border-education/40",
+    badgeText: "text-education",
+  },
 }
 
 const categories: Category[] = [
@@ -81,8 +142,8 @@ const cardVariants = {
 
 export function LandingContent({ isAuthenticated }: LandingContentProps) {
   return (
-    <div className="relative isolate overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),_transparent_60%)]" />
+    <div className="relative isolate overflow-hidden bg-background text-text-primary">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(147,197,253,0.22),_transparent_65%)]" />
       <div className="mx-auto w-full max-w-6xl px-4 pb-24 pt-20 md:px-6 md:pb-32 md:pt-28">
         <motion.section
           initial={{ opacity: 0, y: -20 }}
@@ -90,13 +151,13 @@ export function LandingContent({ isAuthenticated }: LandingContentProps) {
           transition={{ duration: 0.8 }}
           className="flex flex-col items-center text-center"
         >
-          <span className="inline-flex items-center rounded-full border border-blue-500/40 bg-blue-500/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-blue-300">
+          <span className="inline-flex items-center rounded-full border border-business/30 bg-business-soft/70 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-business">
             AI Trainer For Humans
           </span>
-          <h1 className="mt-6 text-4xl font-bold leading-tight md:text-6xl">
+          <h1 className="mt-6 text-4xl font-bold leading-tight text-text-primary md:text-6xl">
             AI at your fingertips
           </h1>
-          <p className="mt-4 max-w-2xl text-lg text-muted-foreground md:text-xl">
+          <p className="mt-4 max-w-2xl text-lg text-text-secondary md:text-xl">
             No prompts needed, just tap and go. Build plans, track progress, and let AI move with you.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -104,7 +165,7 @@ export function LandingContent({ isAuthenticated }: LandingContentProps) {
               <>
                 <Button
                   asChild
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 px-8 py-6 text-lg font-semibold shadow-lg transition hover:from-blue-600 hover:to-purple-700"
+                  className="px-8 py-6 text-lg font-semibold shadow-md shadow-surface-muted/60 hover:shadow-lg"
                 >
                   <Link href="/dashboard">Go to Dashboard</Link>
                 </Button>
@@ -116,7 +177,7 @@ export function LandingContent({ isAuthenticated }: LandingContentProps) {
               <>
                 <Button
                   asChild
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 px-8 py-6 text-lg font-semibold shadow-lg transition hover:from-blue-600 hover:to-purple-700"
+                  className="px-8 py-6 text-lg font-semibold shadow-md shadow-surface-muted/60 hover:shadow-lg"
                 >
                   <Link href="/auth/signup">Get Started Free</Link>
                 </Button>
@@ -145,22 +206,45 @@ export function LandingContent({ isAuthenticated }: LandingContentProps) {
                   ? category.dashboardHref
                   : `/auth/login?redirect=${encodeURIComponent(category.dashboardHref)}`
                 : null;
+            const visual = CATEGORY_STYLES[category.title] ?? {
+              cardBg: "bg-card/90",
+              cardBorder: "border-border/60",
+              title: "text-text-primary",
+              link: "text-link",
+              badgeBg: "bg-surface-muted",
+              badgeBorder: "border-border",
+              badgeText: "text-text-secondary",
+            }
 
             return (
               <motion.div key={category.title} variants={cardVariants}>
-              <Card className="group h-full border border-white/10 bg-white/5 backdrop-blur-sm transition hover:border-blue-500/50">
+              <Card
+                className={clsx(
+                  "group h-full border backdrop-blur-sm shadow-sm shadow-surface-muted/40 transition hover:shadow-md",
+                  visual.cardBg,
+                  visual.cardBorder
+                )}
+              >
                 <CardContent className="flex h-full flex-col gap-4 p-6">
                   <div className="flex items-center justify-between">
                     <span className="text-3xl">{category.icon}</span>
                     {!category.isActive && category.comingSoon && (
-                      <Badge variant="outline" className="border-blue-500/40 bg-blue-500/10 text-blue-300">
+                      <Badge
+                        variant="outline"
+                        className={clsx(
+                          "border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide",
+                          visual.badgeBorder,
+                          visual.badgeBg,
+                          visual.badgeText
+                        )}
+                      >
                         Coming Soon
                       </Badge>
                     )}
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-xl font-semibold text-white">{category.title}</h3>
-                    <p className="text-sm text-muted-foreground">{category.description}</p>
+                    <h3 className={clsx("text-xl font-semibold", visual.title)}>{category.title}</h3>
+                    <p className="text-sm text-text-secondary">{category.description}</p>
                   </div>
                   <div className="mt-auto flex items-center justify-between">
                     {activeHref ? (
@@ -175,7 +259,10 @@ export function LandingContent({ isAuthenticated }: LandingContentProps) {
                     {activeHref ? (
                       <Link
                         href={activeHref}
-                        className="text-sm font-medium text-blue-300 transition hover:text-blue-100"
+                        className={clsx(
+                          "text-sm font-medium transition hover:opacity-80",
+                          visual.link
+                        )}
                       >
                         View All →
                       </Link>

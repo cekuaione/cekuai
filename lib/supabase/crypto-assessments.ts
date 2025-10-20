@@ -7,11 +7,15 @@ import { getSupabaseBrowserClient } from "./client";
 import { getSupabaseUserClient } from "./server";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database, Json } from "./database.types";
+import {
+  AssessmentStatus,
+  InvestmentDecision,
+} from "@/lib/types/investing";
 import type {
   CryptoAssessment,
   CryptoAssessmentInsert,
   AssessmentData,
-  AssessmentStatus,
+  InvestingDashboardStats,
 } from "@/lib/types/investing";
 
 /**
@@ -532,6 +536,139 @@ export async function getAssessmentCount(
 }
 
 /**
+ * Retrieve latest ready crypto assessments for a user.
+ * Useful for dashboard views.
+ */
+export async function getUserCryptoAssessments(
+  userId: string,
+  { limit }: { limit?: number } = {}
+): Promise<CryptoAssessment[]> {
+  try {
+    const supabase = await getSupabaseUserClient();
+
+    let query = supabase
+      .from("crypto_assessments")
+      .select("*")
+      .eq("user_id", userId)
+      .eq("status", AssessmentStatus.READY)
+      .order("created_at", { ascending: false });
+
+    if (typeof limit === "number") {
+      query = query.limit(limit);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+      throw error;
+    }
+
+    return (data || []) as CryptoAssessment[];
+  } catch (error) {
+    console.error("Error fetching user crypto assessments:", error);
+    throw new AssessmentError(
+      error instanceof Error ? error.message : "Unknown error",
+      "FETCH_FAILED",
+      { userId, scope: "getUserCryptoAssessments", originalError: error }
+    );
+  }
+}
+
+/**
+ * Fetch the most recent ready assessments with an explicit limit.
+ */
+export async function getRecentAssessments(
+  userId: string,
+  limit = 5
+): Promise<CryptoAssessment[]> {
+  try {
+    return await getUserCryptoAssessments(userId, { limit });
+  } catch (error) {
+    console.error("Error fetching recent assessments:", error);
+    throw new AssessmentError(
+      error instanceof Error ? error.message : "Unknown error",
+      "FETCH_FAILED",
+      { userId, scope: "getRecentAssessments", originalError: error }
+    );
+  }
+}
+
+/**
+ * Compute aggregated investing statistics for dashboard widgets.
+ */
+export async function getUserInvestingStats(
+  userId: string
+): Promise<InvestingDashboardStats> {
+  try {
+    const supabase = await getSupabaseUserClient();
+
+    const { data, error } = await supabase
+      .from("crypto_assessments")
+      .select("id, created_at, assessment_data")
+      .eq("user_id", userId)
+      .eq("status", AssessmentStatus.READY)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      throw error;
+    }
+
+    const rows =
+      (data as Pick<CryptoAssessment, "id" | "created_at" | "assessment_data">[]) ||
+      [];
+
+    const startOfMonth = new Date();
+    startOfMonth.setUTCDate(1);
+    startOfMonth.setUTCHours(0, 0, 0, 0);
+
+    const decisionCounts: Record<InvestmentDecision, number> = {
+      [InvestmentDecision.BUY]: 0,
+      [InvestmentDecision.SELL]: 0,
+      [InvestmentDecision.HOLD]: 0,
+      [InvestmentDecision.DONT_INVEST]: 0,
+    };
+
+    let monthlyTotal = 0;
+    let confidenceSum = 0;
+    let confidenceCount = 0;
+
+    for (const row of rows) {
+      const createdAt = new Date(row.created_at);
+      if (!Number.isNaN(createdAt.getTime()) && createdAt >= startOfMonth) {
+        monthlyTotal += 1;
+      }
+
+      const assessmentData = row.assessment_data as AssessmentData | null;
+      const decision = assessmentData?.decision;
+      if (decision && decisionCounts[decision] !== undefined) {
+        decisionCounts[decision] += 1;
+      }
+
+      const confidence = assessmentData?.confidence;
+      if (typeof confidence === "number" && Number.isFinite(confidence)) {
+        confidenceSum += confidence;
+        confidenceCount += 1;
+      }
+    }
+
+    return {
+      totalReady: rows.length,
+      monthlyTotal,
+      decisionCounts,
+      averageConfidence:
+        confidenceCount > 0 ? confidenceSum / confidenceCount : null,
+    };
+  } catch (error) {
+    console.error("Error computing investing stats:", error);
+    throw new AssessmentError(
+      error instanceof Error ? error.message : "Unknown error",
+      "STATS_FAILED",
+      { userId, scope: "getUserInvestingStats", originalError: error }
+    );
+  }
+}
+
+/**
  * Check if user has access to an assessment
  * @param assessmentId - Assessment UUID
  * @param userId - User ID
@@ -567,4 +704,3 @@ export function isSuccess<T>(result: Result<T>): result is { data: T; error: nul
 export function isError<T>(result: Result<T>): result is { data: null; error: AssessmentError } {
   return result.error !== null;
 }
-

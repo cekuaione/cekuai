@@ -129,31 +129,31 @@ export function SignUpForm() {
   }
 
   return (
-    <Card className="w-full border border-white/10 bg-white/5 backdrop-blur">
+    <Card className="w-full border border-border bg-card shadow-sm">
       <CardHeader className="space-y-2">
-        <CardTitle className="text-2xl text-white">Create account</CardTitle>
-        <CardDescription className="text-sm text-white/70">
+        <CardTitle className="text-2xl text-text-primary">Create account</CardTitle>
+        <CardDescription className="text-sm text-text-secondary">
           Start your fitness journey with personalized AI-powered plans.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        {error && <div className="rounded-md bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</div>}
+        {error && <div className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">{error}</div>}
 
         <form onSubmit={onSignUp} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="fullName" className="text-white">Full Name</Label>
+            <Label htmlFor="fullName" className="text-text-secondary">Full Name</Label>
             <Input
               id="fullName"
               type="text"
               placeholder="John Doe"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="bg-slate-800 border-slate-700 text-white placeholder:text-gray-400"
+              className="bg-surface-muted/60 focus-visible:ring-ring"
               required
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-white">Email</Label>
+            <Label htmlFor="email" className="text-text-secondary">Email</Label>
             <Input
               id="email"
               type="email"
@@ -162,12 +162,12 @@ export function SignUpForm() {
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="bg-slate-800 border-slate-700 text-white placeholder:text-gray-400"
+              className="bg-surface-muted/60 focus-visible:ring-ring"
               required
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-white">Password</Label>
+            <Label htmlFor="password" className="text-text-secondary">Password</Label>
             <Input
               id="password"
               type="password"
@@ -175,13 +175,13 @@ export function SignUpForm() {
               placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="bg-slate-800 border-slate-700 text-white placeholder:text-gray-400"
+              className="bg-surface-muted/60 focus-visible:ring-ring"
               required
             />
-            <p className="text-xs text-white/50">Minimum 8 characters</p>
+            <p className="text-xs text-text-secondary/80">Minimum 8 characters</p>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword" className="text-white">Confirm Password</Label>
+            <Label htmlFor="confirmPassword" className="text-text-secondary">Confirm Password</Label>
             <Input
               id="confirmPassword"
               type="password"
@@ -189,7 +189,7 @@ export function SignUpForm() {
               placeholder="********"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="bg-slate-800 border-slate-700 text-white placeholder:text-gray-400"
+              className="bg-surface-muted/60 focus-visible:ring-ring"
               required
             />
           </div>
@@ -198,15 +198,14 @@ export function SignUpForm() {
               id="terms"
               checked={accepted}
               onCheckedChange={(v) => setAccepted(!!v)}
-              className="border-slate-600"
             />
-            <Label htmlFor="terms" className="text-sm text-white/70">
+            <Label htmlFor="terms" className="text-sm text-text-secondary">
               I agree to the{" "}
-              <Link href="/terms" className="text-blue-300 hover:text-blue-200">
+              <Link href="/terms" className="text-link hover:text-link-hover">
                 Terms of Service
               </Link>{" "}
               and{" "}
-              <Link href="/privacy" className="text-blue-300 hover:text-blue-200">
+              <Link href="/privacy" className="text-link hover:text-link-hover">
                 Privacy Policy
               </Link>
             </Label>
@@ -217,17 +216,17 @@ export function SignUpForm() {
         </form>
 
         <div className="relative py-2 text-center">
-          <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-white/10" />
-          <span className="relative bg-white/5 px-3 text-xs uppercase tracking-wide text-white/50">Or continue with</span>
+          <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-border" />
+          <span className="relative bg-card px-3 text-xs uppercase tracking-wide text-text-secondary/80">Or continue with</span>
         </div>
 
         <Button type="button" variant="outline" className="w-full" onClick={onGoogle} disabled={loading}>
           Sign up with Google
         </Button>
 
-        <p className="text-center text-sm text-white/70">
+        <p className="text-center text-sm text-text-secondary">
           Already have an account?{" "}
-          <Link href="/auth/signin" className="text-blue-300 hover:text-blue-200">
+          <Link href="/auth/signin" className="text-link hover:text-link-hover">
             Sign in
           </Link>
         </p>

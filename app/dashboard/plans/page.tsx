@@ -34,8 +34,8 @@ export default async function PlansPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Planlarım</h1>
-          <p className="mt-2 text-gray-400">Tüm antrenman planlarınızı görüntüleyin ve yönetin</p>
+          <h1 className="text-3xl font-bold text-text-primary">Planlarım</h1>
+          <p className="mt-2 text-text-secondary">Tüm antrenman planlarınızı görüntüleyin ve yönetin</p>
         </div>
         <Button asChild size="lg">
           <Link href="/dashboard/sport/workout-plan">+ Yeni Plan Oluştur</Link>

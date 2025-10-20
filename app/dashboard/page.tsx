@@ -35,8 +35,8 @@ export default async function DashboardHomePage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Hoş geldin{session?.user?.name ? `, ${session.user.name}` : ''}</h1>
-          <p className="mt-2 text-gray-400">Gününe hareket katmaya hazır mısın?</p>
+          <h1 className="text-3xl font-bold text-text-primary">Hoş geldin{session?.user?.name ? `, ${session.user.name}` : ''}</h1>
+          <p className="mt-2 text-text-secondary">Gününe hareket katmaya hazır mısın?</p>
         </div>
         <Button asChild size="lg">
           <Link href="/dashboard/sport/workout-plan">+ Yeni Plan Oluştur</Link>

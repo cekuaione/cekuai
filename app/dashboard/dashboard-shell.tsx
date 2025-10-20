@@ -70,19 +70,19 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
   const pathname = usePathname();
 
   return (
-    <div className="flex h-full w-64 flex-col bg-[#0b0b0b] text-slate-200">
+    <div className="flex h-full w-64 flex-col bg-sidebar text-sidebar-foreground">
       <div className="flex items-center gap-3 px-5 py-6">
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 text-xl">
+        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-purple-600 to-blue-600 text-xl shadow-sm">
           ⚡️
         </div>
         <div>
-          <p className="text-lg font-semibold text-white">ceku.ai</p>
-          <p className="text-xs text-slate-400">AI Wellness Studio</p>
+          <p className="text-lg font-semibold text-foreground">ceku.ai</p>
+          <p className="text-xs text-muted-foreground">AI Wellness Studio</p>
         </div>
         {onClose && (
           <button
             onClick={onClose}
-            className="ml-auto rounded-lg border border-slate-800 px-2 py-1 text-xs text-slate-400 transition hover:text-white"
+            className="ml-auto rounded-lg border border-border bg-card px-2 py-1 text-xs text-muted-foreground transition hover:text-foreground hover:bg-accent"
           >
             Kapat
           </button>
@@ -90,7 +90,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
       </div>
 
       <nav className="flex-1 overflow-y-auto px-4">
-        <p className="mb-3 text-xs uppercase tracking-wide text-slate-500">Kategoriler</p>
+        <p className="mb-3 text-xs uppercase tracking-wide text-muted-foreground">Kategoriler</p>
         <div className="space-y-4">
           {NAV_ITEMS.map((category) => {
             const isActiveCategory = category.items.some((item) => pathname?.startsWith(item.href));
@@ -107,16 +107,16 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
             return (
               <div
                 key={category.label}
-                className={`rounded-2xl border px-3 py-3 transition-colors ${
+                className={`rounded-2xl border px-3 py-3 transition-all ${
                   isActiveCategory
-                    ? `${activeBorderColor} ${activeBgColor}`
-                    : "border-transparent bg-transparent"
-                } ${isDisabled ? "opacity-60" : ""}`}
+                    ? `${activeBorderColor} ${activeBgColor} shadow-sm`
+                    : "border-transparent bg-transparent hover:bg-accent/50"
+                } ${isDisabled ? "opacity-50" : ""}`}
               >
                 <div className="mb-2 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="text-lg">{category.icon}</span>
-                    <span className="text-sm font-semibold text-white">{category.label}</span>
+                    <span className="text-sm font-semibold text-foreground">{category.label}</span>
                   </div>
                   {categoryBadge && (
                     <span className={`rounded-full border ${badgeBorderColor} px-2 py-0.5 text-[10px] uppercase tracking-wide ${badgeTextColor}`}>
@@ -126,7 +126,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
                 </div>
 
                 {category.items.length > 0 ? (
-                  <ul className="ml-6 space-y-2 border-l border-slate-800/60 pl-4">
+                  <ul className="ml-6 space-y-2 border-l border-border/60 pl-4">
                     {category.items.map((item) => {
                       const isItemActive = pathname === item.href;
                       const itemDisabled = "disabled" in item && Boolean(item.disabled);
@@ -135,16 +135,16 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
                       return (
                         <li key={item.label} className="flex items-center justify-between">
                           {itemDisabled ? (
-                            <span className="text-xs text-slate-600">• {item.label}</span>
+                            <span className="text-xs text-muted-foreground/60">• {item.label}</span>
                           ) : (
                             <Link
                               href={item.href}
                               className={`text-sm transition ${
                                 isItemActive 
                                   ? isInvesting 
-                                    ? "text-green-400 font-semibold" 
-                                    : "text-white font-semibold"
-                                  : "text-slate-400 hover:text-white"
+                                    ? "text-green-600 dark:text-green-400 font-semibold" 
+                                    : "text-primary font-semibold"
+                                  : "text-muted-foreground hover:text-foreground"
                               }`}
                               onClick={onClose}
                             >
@@ -161,7 +161,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
                     })}
                   </ul>
                 ) : (
-                  <p className="ml-6 text-xs text-slate-600">Yakında</p>
+                  <p className="ml-6 text-xs text-muted-foreground/60">Yakında</p>
                 )}
               </div>
             );
@@ -169,19 +169,19 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
         </div>
       </nav>
 
-      <div className="border-t border-slate-900/70 px-4 py-4">
+      <div className="border-t border-border px-4 py-4">
         <Link
           href="/dashboard/sport/workout-plan"
-          className="block w-full rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2 text-center text-sm font-semibold text-white shadow-lg shadow-blue-900/40 transition hover:from-blue-500 hover:to-purple-500"
+          className="block w-full rounded-xl bg-sport px-4 py-2 text-center text-sm font-semibold text-background shadow-sm shadow-sport/30 transition hover:bg-sport/90"
           onClick={onClose}
         >
           + Yeni Plan
         </Link>
-        <div className="mt-4 flex items-center justify-between text-sm text-slate-500">
-          <Link href="/dashboard/settings" className="rounded-lg px-3 py-2 transition hover:text-white" onClick={onClose}>
+        <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
+          <Link href="/dashboard/settings" className="rounded-lg px-3 py-2 transition hover:text-foreground hover:bg-accent" onClick={onClose}>
             Ayarlar
           </Link>
-          <Link href="/support" className="rounded-lg px-3 py-2 transition hover:text-white">
+          <Link href="/support" className="rounded-lg px-3 py-2 transition hover:text-foreground hover:bg-accent">
             Destek
           </Link>
         </div>
@@ -199,40 +199,40 @@ export function DashboardShell({ children, userName }: DashboardShellProps) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-black text-slate-100">
+    <div className="flex h-screen bg-background text-foreground">
       <aside className="hidden h-full lg:flex">
         <SidebarContent />
       </aside>
 
       {isSidebarOpen && (
         <div className="fixed inset-0 z-40 flex lg:hidden">
-          <div className="h-full w-64 shadow-2xl shadow-black/60">
+          <div className="h-full w-64 shadow-2xl shadow-surface-muted/40">
             <SidebarContent onClose={() => setSidebarOpen(false)} />
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="flex-1 bg-black/70 backdrop-blur-sm"
+            className="flex-1 bg-background/80 backdrop-blur-sm"
             aria-label="Menüyü kapat"
           />
         </div>
       )}
 
       <main className="flex flex-1 flex-col">
-        <div className="flex items-center justify-between border-b border-neutral-900 bg-black px-4 py-4 lg:hidden">
+        <div className="flex items-center justify-between border-b border-border bg-card px-4 py-4 lg:hidden">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="rounded-lg border border-neutral-800 px-3 py-2 text-sm text-slate-300 transition hover:text-white"
+            className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground transition hover:bg-accent"
             aria-label="Menüyü aç"
           >
             ☰ Menü
           </button>
-          <span className="text-sm font-semibold text-slate-300">Sport · Workout Plans</span>
-          <span className="rounded-full bg-gradient-to-r from-purple-600 to-blue-600 px-3 py-2 text-xs text-white">
+          <span className="text-sm font-semibold text-muted-foreground">Sport · Workout Plans</span>
+          <span className="rounded-full bg-sport px-3 py-2 text-xs font-semibold text-background shadow-sm shadow-sport/30">
             {userName ? userName : "ceku.ai"}
           </span>
         </div>
 
-        <div className="flex flex-1 flex-col bg-black overflow-y-auto overflow-x-hidden">
+        <div className="flex flex-1 flex-col bg-background overflow-y-auto overflow-x-hidden">
           {children}
         </div>
       </main>

@@ -19,7 +19,7 @@ export function MessageBubble({ type, content, showAvatar = true }: MessageBubbl
       className={`flex gap-3 ${isAI ? "justify-start pl-1" : "justify-end pr-1"}`}
     >
       {isAI && showAvatar && (
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-emerald-500 text-lg shadow-lg shadow-green-900/40">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-investing-soft text-lg text-investing shadow-lg shadow-investing/30">
           💰
         </div>
       )}
@@ -30,21 +30,20 @@ export function MessageBubble({ type, content, showAvatar = true }: MessageBubbl
       )}
 
       <div
-        className={`max-w-[82%] rounded-[26px] border-none ring-0 px-6 py-4 text-sm leading-relaxed text-white shadow-lg backdrop-blur md:text-base md:leading-relaxed ${
+        className={`max-w-[82%] rounded-[26px] border-none ring-0 px-6 py-4 text-sm leading-relaxed shadow-lg md:text-base md:leading-relaxed ${
           isAI
-            ? "bg-gradient-to-r from-emerald-400 via-green-500 to-emerald-500 shadow-green-500/30"
-            : "bg-gradient-to-r from-purple-500 via-fuchsia-500 to-pink-500 shadow-fuchsia-500/30"
+            ? "bg-investing-soft text-investing shadow-investing/30"
+            : "bg-surface-strong text-text-primary shadow-surface-muted/40"
         } ${isAI ? "rounded-tl-sm" : "rounded-tr-sm"}`}
       >
         <p className="whitespace-pre-line">{content}</p>
       </div>
 
       {!isAI && (
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-lg shadow-lg shadow-purple-900/40">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-business-soft text-lg text-business shadow-lg shadow-business/30">
           👤
         </div>
       )}
     </motion.div>
   );
 }
-

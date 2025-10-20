@@ -120,17 +120,17 @@ function AssessmentResultContent() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 to-emerald-950 text-white">
-        <p className="text-lg">Analiz raporu hazırlanıyor...</p>
+      <div className="flex min-h-screen items-center justify-center bg-background text-text-primary">
+        <p className="text-lg text-text-secondary">Analiz raporu hazırlanıyor...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 to-emerald-950 text-white">
-        <div className="max-w-md rounded-2xl border border-red-500/40 bg-red-500/10 px-6 py-8 text-center">
-          <p className="text-lg font-semibold text-red-200">{error}</p>
+      <div className="flex min-h-screen items-center justify-center bg-background text-text-primary">
+        <div className="max-w-md rounded-2xl border border-destructive/40 bg-destructive/10 px-6 py-8 text-center shadow-sm">
+          <p className="text-lg font-semibold text-destructive">{error}</p>
           <div className="mt-4 flex justify-center gap-3">
             <Button variant="secondary" onClick={() => router.push("/dashboard/investing/crypto-assessment")}>
               Geri dön
@@ -145,9 +145,9 @@ function AssessmentResultContent() {
 
   if (status !== "ready") {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-950 to-emerald-950 text-white">
-        <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 px-6 py-8 text-center">
-          <p className="text-base text-emerald-200">
+      <div className="flex min-h-screen items-center justify-center bg-background text-text-primary">
+        <div className="rounded-2xl border border-investing/40 bg-investing-soft px-6 py-8 text-center shadow-sm">
+          <p className="text-base text-investing">
             Analiz hâlâ hazırlanıyor. Lütfen birkaç saniye sonra tekrar dene.
           </p>
         </div>
@@ -159,22 +159,22 @@ function AssessmentResultContent() {
   const decisionLabel = decision ? decisionLabels[decision] ?? decision : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 to-emerald-950">
+    <div className="min-h-screen bg-background text-text-primary">
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <Link href="/" className="text-sm text-slate-500 hover:text-slate-300">
+          <Link href="/" className="text-sm text-text-secondary hover:text-text-primary">
             Home
           </Link>
-          <span className="mx-2 text-sm text-slate-500">›</span>
-          <Link href="/investing" className="text-sm text-slate-500 hover:text-slate-300">
+          <span className="mx-2 text-sm text-text-secondary">›</span>
+          <Link href="/investing" className="text-sm text-text-secondary hover:text-text-primary">
             Investing
           </Link>
-          <span className="mx-2 text-sm text-slate-500">›</span>
-          <Link href="/dashboard/investing/crypto-assessment" className="text-sm text-slate-500 hover:text-slate-300">
+          <span className="mx-2 text-sm text-text-secondary">›</span>
+          <Link href="/dashboard/investing/crypto-assessment" className="text-sm text-text-secondary hover:text-text-primary">
             Kripto Analizi
           </Link>
-          <span className="mx-2 text-sm text-slate-500">›</span>
-          <span className="text-sm text-slate-300">Sonuç</span>
+          <span className="mx-2 text-sm text-text-secondary">›</span>
+          <span className="text-sm text-text-secondary/80">Sonuç</span>
         </div>
 
         <motion.div
@@ -183,42 +183,42 @@ function AssessmentResultContent() {
           transition={{ duration: 0.6 }}
           className="mb-8 text-center"
         >
-          <h1 className="mb-2 text-3xl font-bold text-white">Kripto Analiz Raporu</h1>
-          <p className="text-sm text-slate-400">
-            Analiz ID: <span className="font-mono text-slate-300">{assessment.id}</span>
+          <h1 className="mb-2 text-3xl font-bold text-text-primary">Kripto Analiz Raporu</h1>
+          <p className="text-sm text-text-secondary">
+            Analiz ID: <span className="font-mono text-text-secondary/80">{assessment.id}</span>
           </p>
         </motion.div>
 
         <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
           <motion.div variants={cardVariants}>
-            <Card className="border-emerald-500/20 bg-slate-950/70 text-white backdrop-blur">
+            <Card className="border border-border bg-card text-text-primary shadow-sm">
               <CardHeader>
                 <CardTitle>Özet Bilgiler</CardTitle>
               </CardHeader>
               <CardContent className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-                  <p className="text-sm text-slate-400">Kripto Para</p>
+                <div className="space-y-2 rounded-xl border border-investing/40 bg-investing-soft p-4">
+                  <p className="text-sm text-text-secondary">Kripto Para</p>
                   <p className="text-xl font-semibold">{assessment.crypto_symbol}</p>
-                  <Badge variant="secondary" className="mt-2 w-fit bg-emerald-700/40 text-emerald-100">
+                  <Badge variant="secondary" className="mt-2 w-fit bg-investing-soft text-investing">
                     {decisionLabel ?? "Analiz Tamamlandı"}
                   </Badge>
                 </div>
-                <div className="space-y-2 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-                  <p className="text-sm text-slate-400">Yatırım Tutarı</p>
+                <div className="space-y-2 rounded-xl border border-investing/40 bg-investing-soft p-4">
+                  <p className="text-sm text-text-secondary">Yatırım Tutarı</p>
                   <p className="text-xl font-semibold">{formatCurrency(assessment.investment_amount)}</p>
                 </div>
-                <div className="space-y-2 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-                  <p className="text-sm text-slate-400">Risk Toleransı</p>
+                <div className="space-y-2 rounded-xl border border-investing/40 bg-investing-soft p-4">
+                  <p className="text-sm text-text-secondary">Risk Toleransı</p>
                   <p className="text-lg font-semibold">{formattedRisk}</p>
                 </div>
-                <div className="space-y-2 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-                  <p className="text-sm text-slate-400">Zaman Ufku</p>
+                <div className="space-y-2 rounded-xl border border-investing/40 bg-investing-soft p-4">
+                  <p className="text-sm text-text-secondary">Zaman Ufku</p>
                   <p className="text-lg font-semibold">{formattedTime}</p>
                 </div>
                 {assessment.notes && (
-                  <div className="md:col-span-2 space-y-2 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-                    <p className="text-sm text-slate-400">Notlar</p>
-                    <p className="text-sm text-slate-200">{assessment.notes}</p>
+                  <div className="md:col-span-2 space-y-2 rounded-xl border border-investing/40 bg-investing-soft p-4">
+                    <p className="text-sm text-text-secondary">Notlar</p>
+                    <p className="text-sm text-text-secondary">{assessment.notes}</p>
                   </div>
                 )}
               </CardContent>
@@ -227,26 +227,26 @@ function AssessmentResultContent() {
 
           {assessmentData && (
             <motion.div variants={cardVariants}>
-              <Card className="border-emerald-500/20 bg-slate-950/70 text-white backdrop-blur">
+              <Card className="border border-border bg-card text-text-primary shadow-sm">
                 <CardHeader>
                   <CardTitle>AI Analiz Detayları</CardTitle>
                 </CardHeader>
                 <CardContent className="grid gap-6 lg:grid-cols-2">
                   <div className="space-y-4">
-                    <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-                      <p className="text-sm text-slate-400">Karar</p>
-                      <p className="text-2xl font-bold text-emerald-300">{decisionLabel ?? "Belirsiz"}</p>
-                      <p className="mt-2 text-sm text-slate-300">
-                        Güven skoru: <span className="font-semibold text-white">{assessmentData.confidence}/10</span>
+                    <div className="rounded-xl border border-investing/40 bg-investing-soft p-4">
+                      <p className="text-sm text-text-secondary">Karar</p>
+                      <p className="text-2xl font-bold text-investing">{decisionLabel ?? "Belirsiz"}</p>
+                      <p className="mt-2 text-sm text-text-secondary/80">
+                        Güven skoru: <span className="font-semibold text-text-primary">{assessmentData.confidence}/10</span>
                       </p>
-                      <p className="text-sm text-slate-300">
-                        Risk skoru: <span className="font-semibold text-white">{assessmentData.riskScore}/10</span>
+                      <p className="text-sm text-text-secondary/80">
+                        Risk skoru: <span className="font-semibold text-text-primary">{assessmentData.riskScore}/10</span>
                       </p>
                     </div>
 
-                    <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-                      <p className="text-sm text-slate-400">Fiyat Hedefleri</p>
-                    <ul className="mt-2 space-y-1 text-sm text-slate-200">
+                    <div className="rounded-xl border border-investing/40 bg-investing-soft p-4">
+                      <p className="text-sm text-text-secondary">Fiyat Hedefleri</p>
+                    <ul className="mt-2 space-y-1 text-sm text-text-secondary">
                       <li>Giriş: {formatCurrency(assessmentData.entryPrice)}</li>
                       <li>Hedef: {formatCurrency(assessmentData.targetPrice)}</li>
                       <li>Zarar Durdur: {formatCurrency(assessmentData.stopLoss)}</li>
@@ -261,15 +261,15 @@ function AssessmentResultContent() {
                   </div>
 
                   <div className="space-y-4">
-                    <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-                      <p className="text-sm text-slate-400">Piyasa Yorumu</p>
-                      <p className="mt-2 text-sm text-slate-200">{assessmentData.marketContext}</p>
+                    <div className="rounded-xl border border-investing/40 bg-investing-soft p-4">
+                      <p className="text-sm text-text-secondary">Piyasa Yorumu</p>
+                      <p className="mt-2 text-sm text-text-secondary">{assessmentData.marketContext}</p>
                     </div>
 
                     {Array.isArray(assessmentData.recommendations) && assessmentData.recommendations.length > 0 && (
-                      <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
-                        <p className="text-sm text-slate-400">Öneriler</p>
-                        <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-slate-200">
+                      <div className="rounded-xl border border-investing/40 bg-investing-soft p-4">
+                        <p className="text-sm text-text-secondary">Öneriler</p>
+                        <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-text-secondary">
                           {assessmentData.recommendations.map((item) => (
                             <li key={item}>{item}</li>
                           ))}
@@ -278,9 +278,9 @@ function AssessmentResultContent() {
                     )}
 
                     {assessmentData.warnings && assessmentData.warnings.length > 0 && (
-                      <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4">
-                        <p className="text-sm text-red-200">Uyarılar</p>
-                        <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-red-100">
+                      <div className="rounded-xl border border-destructive/40 bg-destructive/10 p-4">
+                        <p className="text-sm font-semibold text-destructive">Uyarılar</p>
+                        <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-destructive/80">
                           {assessmentData.warnings.map((item) => (
                             <li key={item}>{item}</li>
                           ))}
@@ -300,7 +300,7 @@ function AssessmentResultContent() {
 
 export default function CryptoAssessmentResultPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gradient-to-br from-slate-950 to-emerald-950" />}>
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
       <AssessmentResultContent />
     </Suspense>
   );

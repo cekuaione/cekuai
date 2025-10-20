@@ -35,7 +35,7 @@ export function ChatTextInput({
     <motion.div initial={{ y: 16, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>
       <form
         onSubmit={handleSubmit}
-        className="rounded-3xl border border-neutral-800/80 bg-[#0b0b0b] px-4 py-4 shadow-lg shadow-black/40"
+        className="rounded-3xl border border-border bg-card px-4 py-4 shadow-sm"
       >
         <div className="flex items-end gap-2">
           <div className="flex-1 relative">
@@ -49,7 +49,7 @@ export function ChatTextInput({
               disabled={disabled}
               rows={1}
               inputMode={inputMode}
-              className="w-full resize-none rounded-2xl border border-neutral-700 bg-[#090909] px-4 py-3 text-white placeholder-slate-500 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-500/20 disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full resize-none rounded-2xl border border-border bg-background px-4 py-3 text-foreground placeholder-muted-foreground focus:border-investing focus:outline-none focus:ring-2 focus:ring-investing/20 disabled:cursor-not-allowed disabled:opacity-50"
               style={{
                 minHeight: "52px",
                 maxHeight: "120px",
@@ -62,7 +62,7 @@ export function ChatTextInput({
               }}
             />
             {isFocused && (
-              <div className="absolute bottom-2 right-2 text-xs text-gray-500">
+              <div className="absolute bottom-2 right-2 text-xs text-muted-foreground">
                 {remainingChars}
               </div>
             )}
@@ -73,7 +73,7 @@ export function ChatTextInput({
             disabled={!text.trim() || disabled}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="rounded-2xl bg-gradient-to-r from-green-600 to-emerald-700 px-6 py-3 font-semibold text-white shadow-lg shadow-green-600/30 transition-all disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-2xl bg-investing px-6 py-3 font-semibold text-background shadow-sm transition-all hover:bg-investing/90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Gönder
           </motion.button>

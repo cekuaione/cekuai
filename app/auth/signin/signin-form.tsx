@@ -72,20 +72,20 @@ export function SignInForm() {
   }
 
   return (
-    <Card className="w-full border border-white/10 bg-white/5 backdrop-blur">
+    <Card className="w-full border border-border bg-card shadow-sm">
       <CardHeader className="space-y-2">
-        <CardTitle className="text-2xl text-white">Sign in</CardTitle>
-        <CardDescription className="text-sm text-white/70">
+        <CardTitle className="text-2xl text-text-primary">Sign in</CardTitle>
+        <CardDescription className="text-sm text-text-secondary">
           Welcome back! Enter your credentials or continue with Google.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        {errorParam && <div className="rounded-md bg-red-500/10 px-3 py-2 text-sm text-red-300">{decodeURIComponent(errorParam)}</div>}
-        {error && <div className="rounded-md bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</div>}
+        {errorParam && <div className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">{decodeURIComponent(errorParam)}</div>}
+        {error && <div className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">{error}</div>}
 
         <form onSubmit={onEmailSignIn} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-white">Email</Label>
+            <Label htmlFor="email" className="text-text-secondary">Email</Label>
             <Input
               id="email"
               type="email"
@@ -94,12 +94,12 @@ export function SignInForm() {
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="bg-slate-800 border-slate-700 text-white placeholder:text-gray-400"
+              className="bg-surface-muted/60 focus-visible:ring-ring"
               required
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-white">Password</Label>
+            <Label htmlFor="password" className="text-text-secondary">Password</Label>
             <Input
               id="password"
               type="password"
@@ -107,7 +107,7 @@ export function SignInForm() {
               placeholder="********"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="bg-slate-800 border-slate-700 text-white placeholder:text-gray-400"
+              className="bg-surface-muted/60 focus-visible:ring-ring"
               required
             />
           </div>
@@ -117,8 +117,8 @@ export function SignInForm() {
         </form>
 
         <div className="relative py-2 text-center">
-          <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-white/10" />
-          <span className="relative bg-white/5 px-3 text-xs uppercase tracking-wide text-white/50">Or continue with</span>
+          <span className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-border" />
+          <span className="relative bg-card px-3 text-xs uppercase tracking-wide text-text-secondary/80">Or continue with</span>
         </div>
 
         <Button type="button" variant="outline" className="w-full" onClick={onGoogle} disabled={loading}>
@@ -127,7 +127,7 @@ export function SignInForm() {
 
         <p className="text-center text-sm text-muted-foreground">
           New here?{" "}
-          <Link href="/auth/signup" className="text-blue-300 hover:text-blue-200">
+          <Link href="/auth/signup" className="text-link hover:text-link-hover">
             Create an account
           </Link>
         </p>

@@ -19,7 +19,7 @@ export function MessageBubble({ type, content, showAvatar = true }: MessageBubbl
       className={`flex gap-3 ${isAI ? "justify-start pl-1" : "justify-end pr-1"}`}
     >
       {isAI && showAvatar && (
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 text-lg shadow-lg shadow-blue-900/40">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sport-soft text-lg text-sport shadow-lg shadow-sport/30">
           💪
         </div>
       )}
@@ -30,17 +30,17 @@ export function MessageBubble({ type, content, showAvatar = true }: MessageBubbl
       )}
 
       <div
-        className={`max-w-[82%] rounded-[26px] border-none ring-0 px-6 py-4 text-sm leading-relaxed text-white shadow-lg backdrop-blur md:text-base md:leading-relaxed ${
+        className={`max-w-[82%] rounded-[26px] border-none ring-0 px-6 py-4 text-sm leading-relaxed shadow-lg md:text-base md:leading-relaxed ${
           isAI
-            ? "bg-gradient-to-r from-cyan-400 via-cyan-500 to-blue-500 shadow-cyan-500/30"
-            : "bg-gradient-to-r from-purple-500 via-fuchsia-500 to-pink-500 shadow-fuchsia-500/30"
+            ? "bg-sport-soft text-sport shadow-sport/30"
+            : "bg-surface-strong text-text-primary shadow-surface-muted/40"
         } ${isAI ? "rounded-tl-sm" : "rounded-tr-sm"}`}
       >
         <p className="whitespace-pre-line">{content}</p>
       </div>
 
       {!isAI && (
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-lg shadow-lg shadow-purple-900/40">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-education-soft text-lg text-education shadow-lg shadow-education/30">
           👤
         </div>
       )}

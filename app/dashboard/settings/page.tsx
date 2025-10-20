@@ -25,8 +25,8 @@ export default async function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-white">Ayarlar</h1>
-        <p className="mt-2 text-gray-400">Hesap bilgilerinizi ve tercihlerinizi yönetin</p>
+        <h1 className="text-3xl font-bold text-text-primary">Ayarlar</h1>
+        <p className="mt-2 text-text-secondary">Hesap bilgilerinizi ve tercihlerinizi yönetin</p>
       </div>
       <SettingsForm 
         userId={userId}
@@ -37,5 +37,4 @@ export default async function SettingsPage() {
     </div>
   )
 }
-
 

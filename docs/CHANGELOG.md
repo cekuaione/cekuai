@@ -9,6 +9,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **NEW dashboard result pages**
+  - Migrated workout plan result page to NEW dashboard system
+  - Migrated crypto assessment result page to NEW dashboard system
+  - Server-side data fetching for better performance
+  - Consistent design with NEW dashboard style
+
+### Fixed
+- **Sport dashboard statistics accuracy**
+  - Fixed "Toplam Plan" count to show all 77 plans (was filtering by status and showing 65)
+  - Changed "Tamamlanan Antrenman" to "Yakında" (estimated calculation was incorrect)
+  - Removed status filter from `getUserSportStats` to count all user plans
+
+### Changed
+- **Navigation updates for NEW result pages**
+  - Updated WorkoutFeatureTrigger to navigate to `/new-dashboard/sport/workout-plans/[id]`
+  - Updated CryptoFeatureTrigger to navigate to `/new-dashboard/investing/crypto-assessment/[id]`
+  - Updated home dashboard links to NEW result page paths
+  - Updated sport dashboard "Bugünün antrenmanı" button to NEW result page
+
 ### Changed
 - Major chat interface overhaul with dark blue/purple theme, high-contrast bubbles, and refined spacing.
 - Chat container now anchors to bottom with smooth auto-scroll for new and existing messages.
