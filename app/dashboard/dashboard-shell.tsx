@@ -22,6 +22,28 @@ const NAV_ITEMS = [
     ],
   },
   {
+    label: "Investing",
+    icon: "💰",
+    items: [
+      {
+        label: "Crypto Risk Assessment",
+        href: "/investing/crypto-assessment",
+      },
+      {
+        label: "Portfolio Analyzer",
+        href: "/investing/portfolio",
+        disabled: true,
+        badge: "Yakında",
+      },
+      {
+        label: "Market Insights",
+        href: "/investing/market-insights",
+        disabled: true,
+        badge: "Yakında",
+      },
+    ],
+  },
+  {
     label: "Food",
     icon: "🍽️",
     items: [],
@@ -74,13 +96,20 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
             const isActiveCategory = category.items.some((item) => pathname?.startsWith(item.href));
             const isDisabled = "disabled" in category && Boolean(category.disabled);
             const categoryBadge = "badge" in category ? category.badge : undefined;
+            
+            // Use green accent for Investing, purple for others
+            const isInvesting = category.label === "Investing";
+            const activeBorderColor = isInvesting ? "border-green-500/40" : "border-purple-500/40";
+            const activeBgColor = isInvesting ? "bg-green-500/10" : "bg-purple-500/10";
+            const badgeBorderColor = isInvesting ? "border-green-500/40" : "border-purple-500/40";
+            const badgeTextColor = isInvesting ? "text-green-300" : "text-purple-300";
 
             return (
               <div
                 key={category.label}
                 className={`rounded-2xl border px-3 py-3 transition-colors ${
                   isActiveCategory
-                    ? "border-purple-500/40 bg-purple-500/10"
+                    ? `${activeBorderColor} ${activeBgColor}`
                     : "border-transparent bg-transparent"
                 } ${isDisabled ? "opacity-60" : ""}`}
               >
@@ -90,7 +119,7 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
                     <span className="text-sm font-semibold text-white">{category.label}</span>
                   </div>
                   {categoryBadge && (
-                    <span className="rounded-full border border-purple-500/40 px-2 py-0.5 text-[10px] uppercase tracking-wide text-purple-300">
+                    <span className={`rounded-full border ${badgeBorderColor} px-2 py-0.5 text-[10px] uppercase tracking-wide ${badgeTextColor}`}>
                       {categoryBadge}
                     </span>
                   )}
@@ -101,20 +130,31 @@ function SidebarContent({ onClose }: { onClose?: () => void }) {
                     {category.items.map((item) => {
                       const isItemActive = pathname === item.href;
                       const itemDisabled = "disabled" in item && Boolean(item.disabled);
+                      const itemBadge = "badge" in item ? item.badge : undefined;
+                      
                       return (
-                        <li key={item.label}>
+                        <li key={item.label} className="flex items-center justify-between">
                           {itemDisabled ? (
                             <span className="text-xs text-slate-600">• {item.label}</span>
                           ) : (
                             <Link
                               href={item.href}
                               className={`text-sm transition ${
-                                isItemActive ? "text-white" : "text-slate-400 hover:text-white"
+                                isItemActive 
+                                  ? isInvesting 
+                                    ? "text-green-400 font-semibold" 
+                                    : "text-white font-semibold"
+                                  : "text-slate-400 hover:text-white"
                               }`}
                               onClick={onClose}
                             >
                               • {item.label}
                             </Link>
+                          )}
+                          {itemBadge && (
+                            <span className={`rounded-full border ${badgeBorderColor} px-1.5 py-0.5 text-[9px] uppercase tracking-wide ${badgeTextColor}`}>
+                              {itemBadge}
+                            </span>
                           )}
                         </li>
                       );

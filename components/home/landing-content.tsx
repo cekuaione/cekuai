@@ -24,7 +24,14 @@ const categories: Category[] = [
     icon: "💪",
     title: "Sport",
     description: "Tailored workout plans, coaching, and wellness tools.",
-    dashboardHref: "/dashboard/sport/workout-plan",
+    dashboardHref: "/sport",
+    isActive: true,
+  },
+  {
+    icon: "💰",
+    title: "Investing",
+    description: "Crypto risk assessment and portfolio analysis tools.",
+    dashboardHref: "/investing",
     isActive: true,
   },
   {

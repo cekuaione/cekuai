@@ -86,6 +86,51 @@ export type Database = {
         }
         Relationships: []
       }
+      crypto_assessments: {
+        Row: {
+          id: string
+          user_id: string
+          crypto_symbol: string
+          investment_amount: number
+          risk_tolerance: string
+          time_horizon: string
+          notes: string | null
+          assessment_data: Json | null
+          status: string
+          error_message: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          crypto_symbol: string
+          investment_amount: number
+          risk_tolerance: string
+          time_horizon: string
+          notes?: string | null
+          assessment_data?: Json | null
+          status?: string
+          error_message?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          crypto_symbol?: string
+          investment_amount?: number
+          risk_tolerance?: string
+          time_horizon?: string
+          notes?: string | null
+          assessment_data?: Json | null
+          status?: string
+          error_message?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
