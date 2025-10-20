@@ -28,6 +28,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Consistent design with NEW dashboard style
 
 ### Fixed
+- **Mobile "Keşfet" button navigation**
+  - Fixed "En Çok Kullandığın Araçlar" section buttons
+  - Workout Plan Generator now navigates to `/dashboard/sport`
+  - Crypto Risk Assessment now navigates to `/dashboard/investing`
+  - Fixed "Hızlı erişim" section links to use `/dashboard` paths
+  - All buttons now work correctly on mobile devices
+
+- **Crypto assessment result page - AI reasoning display**
+  - Fixed "Piyasa Yorumu" section to display `assessment_data.reasoning`
+  - Added fallback to `marketContext` for backward compatibility
+  - Added placeholder text when reasoning is missing
+  - Improved text formatting with `whitespace-pre-wrap` and `leading-relaxed`
+
 - **Build errors - ESLint apostrophe escaping**
   - Fixed unescaped apostrophes in result page button text
   - Updated "Dashboard'a Dön" to use `&apos;` HTML entity

@@ -191,7 +191,9 @@ export default async function CryptoAssessmentResultPage({
             <div className="space-y-4">
               <div className="rounded-xl border border-investing/40 bg-investing-soft p-4">
                 <p className="text-sm text-text-secondary">Piyasa Yorumu</p>
-                <p className="mt-2 text-sm text-text-secondary">{assessmentData.marketContext}</p>
+                <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-text-secondary">
+                  {assessmentData.reasoning || assessmentData.marketContext || "Piyasa yorumu henüz hazırlanmadı."}
+                </p>
               </div>
 
               {Array.isArray(assessmentData.recommendations) && assessmentData.recommendations.length > 0 && (
