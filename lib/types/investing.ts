@@ -97,12 +97,17 @@ export interface AssessmentData {
   decision: InvestmentDecision;
   confidence: number; // 1-10
   riskScore: number; // 1-10
-  priceTargets: PriceTargets;
+  priceTargets?: PriceTargets;
+  entryPrice: number;
+  targetPrice: number;
+  stopLoss: number;
+  takeProfit1?: number;
+  takeProfit2?: number;
   technicalSignals: TechnicalSignals;
   riskAnalysis: RiskAnalysis;
   reasoning: string; // AI explanation in Turkish
   marketContext: string; // Current market conditions
-  recommendations: string[]; // Action items
+  recommendations?: string[]; // Action items
   warnings?: string[]; // Risk warnings
   timestamp: string; // ISO 8601 timestamp
 }
@@ -273,4 +278,3 @@ export function isAssessmentError<T>(
 ): response is { success: false; error: AssessmentError } {
   return response.success === false;
 }
-
