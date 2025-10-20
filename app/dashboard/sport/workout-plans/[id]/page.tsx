@@ -108,10 +108,10 @@ export default async function WorkoutPlanResultPage({
             Bu plan mevcut değil veya erişim yetkiniz yok.
           </p>
           <Button asChild className="mt-4">
-            <Link href="/new-dashboard/sport">
-              <ArrowLeft className="mr-2 h-4 w-4" />
+              <Link href="/dashboard/sport">
+                <ArrowLeft className="mr-2 h-4 w-4" />
                 Sport Dashboard&apos;a Dön
-            </Link>
+              </Link>
           </Button>
         </div>
       </div>
@@ -126,10 +126,10 @@ export default async function WorkoutPlanResultPage({
             Plan hâlâ hazırlanıyor. Lütfen birkaç saniye sonra tekrar dene.
           </p>
           <Button asChild className="mt-4">
-            <Link href="/new-dashboard/sport">
-              <ArrowLeft className="mr-2 h-4 w-4" />
+              <Link href="/dashboard/sport">
+                <ArrowLeft className="mr-2 h-4 w-4" />
                 Sport Dashboard&apos;a Dön
-            </Link>
+              </Link>
           </Button>
         </div>
       </div>
@@ -146,11 +146,11 @@ export default async function WorkoutPlanResultPage({
       {/* Header */}
       <div className="rounded-2xl border border-border bg-card px-6 py-7 shadow-sm">
         <div className="mb-4 flex items-center gap-2 text-sm text-text-secondary">
-          <Link href="/new-dashboard" className="hover:text-text-primary">
+          <Link href="/dashboard" className="hover:text-text-primary">
             Ana Sayfa
           </Link>
           <span>›</span>
-          <Link href="/new-dashboard/sport" className="hover:text-text-primary">
+          <Link href="/dashboard/sport" className="hover:text-text-primary">
             Sport
           </Link>
           <span>›</span>
@@ -218,7 +218,7 @@ export default async function WorkoutPlanResultPage({
                 PDF İndir
               </Button>
               <Button variant="outline" className="flex-1" asChild>
-                <Link href="/new-dashboard/sport">Yeni Plan</Link>
+                <Link href="/dashboard/sport">Yeni Plan</Link>
               </Button>
             </div>
           </CardContent>

@@ -1,40 +1,19 @@
-import { getSupabaseUserClient } from '@/lib/supabase/server'
-import { auth } from '@/lib/auth-helpers'
-import { SettingsForm } from './settings-form'
-
-export const dynamic = 'force-dynamic'
-
-async function getProfile() {
-  const supabase = await getSupabaseUserClient()
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('full_name, avatar_url')
-    .maybeSingle()
-  if (error) throw new Error(error.message)
-  return data ?? { full_name: '', avatar_url: null as string | null }
-}
-
-export default async function SettingsPage() {
-  const session = await auth()
-  const userId = session?.user?.id
-  if (!userId) return null
-  
-  const email = session.user.email ?? ''
-  const profile = await getProfile()
-
+export default function SettingsDashboardPage() {
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-text-primary">Ayarlar</h1>
-        <p className="mt-2 text-text-secondary">Hesap bilgilerinizi ve tercihlerinizi yönetin</p>
+      <div className="rounded-2xl border border-border bg-card px-6 py-7 shadow-sm">
+        <h1 className="text-3xl font-semibold text-foreground">Ayarlar</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Hesap tercihlerin, bildirimler ve görünüm seçenekleri burada toplu halde yaşayacak. Şimdilik temel bilgiler
+          üzerinde çalışıyoruz.
+        </p>
       </div>
-      <SettingsForm 
-        userId={userId}
-        email={email}
-        fullName={profile.full_name ?? ''}
-        avatarUrl={profile.avatar_url}
-      />
+      <div className="rounded-2xl border border-dashed border-border bg-card/70 px-6 py-10 text-center shadow-none">
+        <p className="text-sm text-muted-foreground">
+          Yeni 3-zon düzenine uygun ayar modülleri tasarlanıyor. Yakında buradan temayı, dil tercihlerini ve bağlı
+          uygulamaları yönetebileceksin.
+        </p>
+      </div>
     </div>
-  )
+  );
 }
-

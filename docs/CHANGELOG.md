@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Dashboard route swap - NEW becomes default**
+  - Moved NEW dashboard from `/new-dashboard` to `/dashboard` (now default)
+  - Moved OLD dashboard from `/dashboard` to `/dashboard-legacy` (backup)
+  - Updated all navigation links to use `/dashboard`
+  - Updated auth redirects to point to `/dashboard`
+  - Updated Sidebar navigation to use `/dashboard`
+  - Updated result page links to use `/dashboard`
+  - Updated modal onSuccess navigation to use `/dashboard`
+  - OLD dashboard preserved at `/dashboard-legacy` for reference
+
 ### Added
 - **NEW dashboard result pages**
   - Migrated workout plan result page to NEW dashboard system
@@ -17,17 +28,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Consistent design with NEW dashboard style
 
 ### Fixed
+- **Build errors - ESLint apostrophe escaping**
+  - Fixed unescaped apostrophes in result page button text
+  - Updated "Dashboard'a Dön" to use `&apos;` HTML entity
+  - Fixed in both NEW dashboard and legacy result pages
+
 - **Sport dashboard statistics accuracy**
   - Fixed "Toplam Plan" count to show all 77 plans (was filtering by status and showing 65)
   - Changed "Tamamlanan Antrenman" to "Yakında" (estimated calculation was incorrect)
   - Removed status filter from `getUserSportStats` to count all user plans
-
-### Changed
-- **Navigation updates for NEW result pages**
-  - Updated WorkoutFeatureTrigger to navigate to `/new-dashboard/sport/workout-plans/[id]`
-  - Updated CryptoFeatureTrigger to navigate to `/new-dashboard/investing/crypto-assessment/[id]`
-  - Updated home dashboard links to NEW result page paths
-  - Updated sport dashboard "Bugünün antrenmanı" button to NEW result page
 
 ### Changed
 - Major chat interface overhaul with dark blue/purple theme, high-contrast bubbles, and refined spacing.

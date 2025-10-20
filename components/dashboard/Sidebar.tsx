@@ -21,15 +21,15 @@ interface SidebarProps {
 
 const NAVIGATION: { main: NavItem[]; footer: NavItem[] } = {
   main: [
-    { icon: "🏠", label: "Ana Sayfa", href: "/new-dashboard", id: "home" },
-    { icon: "🏋️", label: "Sport", href: "/new-dashboard/sport", id: "sport" },
-    { icon: "💰", label: "Investing", href: "/new-dashboard/investing", id: "investing" },
-    { icon: "📊", label: "Business", href: "/new-dashboard/business", id: "business", comingSoon: true },
-    { icon: "🎓", label: "Education", href: "/new-dashboard/education", id: "education", comingSoon: true },
+    { icon: "🏠", label: "Ana Sayfa", href: "/dashboard", id: "home" },
+    { icon: "🏋️", label: "Sport", href: "/dashboard/sport", id: "sport" },
+    { icon: "💰", label: "Investing", href: "/dashboard/investing", id: "investing" },
+    { icon: "📊", label: "Business", href: "/dashboard/business", id: "business", comingSoon: true },
+    { icon: "🎓", label: "Education", href: "/dashboard/education", id: "education", comingSoon: true },
   ],
   footer: [
-    { icon: "⚙️", label: "Ayarlar", href: "/new-dashboard/settings", id: "settings" },
-    { icon: "👤", label: "Profil", href: "/new-dashboard/profile", id: "profile" },
+    { icon: "⚙️", label: "Ayarlar", href: "/dashboard/settings", id: "settings" },
+    { icon: "👤", label: "Profil", href: "/dashboard/profile", id: "profile" },
   ],
 };
 
@@ -104,7 +104,7 @@ const DEFAULT_ACCENT = {
 
 function isActivePath(pathname: string | null, href: string) {
   if (!pathname) return false;
-  if (href === "/new-dashboard") {
+  if (href === "/dashboard") {
     return pathname === href;
   }
   const normalized = href.endsWith("/") ? href.slice(0, -1) : href;

@@ -32,7 +32,7 @@ export function CryptoFeatureTrigger({ children, initialData }: CryptoFeatureTri
       });
       router.refresh();
       if (assessmentId) {
-        router.push(`/new-dashboard/investing/crypto-assessment/${assessmentId}`);
+        router.push(`/dashboard/investing/crypto-assessment/${assessmentId}`);
       }
     },
     [router]

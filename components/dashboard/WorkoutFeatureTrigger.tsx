@@ -32,7 +32,7 @@ export function WorkoutFeatureTrigger({ children, initialData }: WorkoutFeatureT
       });
       router.refresh();
       if (planId) {
-        router.push(`/new-dashboard/sport/workout-plans/${planId}`);
+        router.push(`/dashboard/sport/workout-plans/${planId}`);
       }
     },
     [router]

@@ -59,10 +59,10 @@ export default async function CryptoAssessmentResultPage({
             Bu analiz mevcut değil veya erişim yetkiniz yok.
           </p>
           <Button asChild className="mt-4">
-            <Link href="/new-dashboard/investing">
-              <ArrowLeft className="mr-2 h-4 w-4" />
+              <Link href="/dashboard/investing">
+                <ArrowLeft className="mr-2 h-4 w-4" />
                 Investing Dashboard&apos;a Dön
-            </Link>
+              </Link>
           </Button>
         </div>
       </div>
@@ -82,10 +82,10 @@ export default async function CryptoAssessmentResultPage({
             Analiz hâlâ hazırlanıyor. Lütfen birkaç saniye sonra tekrar dene.
           </p>
           <Button asChild className="mt-4">
-            <Link href="/new-dashboard/investing">
-              <ArrowLeft className="mr-2 h-4 w-4" />
+              <Link href="/dashboard/investing">
+                <ArrowLeft className="mr-2 h-4 w-4" />
                 Investing Dashboard&apos;a Dön
-            </Link>
+              </Link>
           </Button>
         </div>
       </div>
@@ -101,11 +101,11 @@ export default async function CryptoAssessmentResultPage({
       {/* Header */}
       <div className="rounded-2xl border border-border bg-card px-6 py-7 shadow-sm">
         <div className="mb-4 flex items-center gap-2 text-sm text-text-secondary">
-          <Link href="/new-dashboard" className="hover:text-text-primary">
+          <Link href="/dashboard" className="hover:text-text-primary">
             Ana Sayfa
           </Link>
           <span>›</span>
-          <Link href="/new-dashboard/investing" className="hover:text-text-primary">
+          <Link href="/dashboard/investing" className="hover:text-text-primary">
             Investing
           </Link>
           <span>›</span>
