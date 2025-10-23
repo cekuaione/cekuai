@@ -199,7 +199,7 @@ function HeroSection({
               asChild
               className="gap-2 bg-sport px-4 py-2 text-background shadow-sm shadow-sport/30 hover:bg-sport/90"
             >
-              <Link href="/dashboard/sport/workout-plan">
+              <Link href="/dashboard/sport">
                 Bugünün antrenmanı
                 <Dumbbell className="h-4 w-4" />
               </Link>
@@ -209,7 +209,7 @@ function HeroSection({
               variant="outline"
               className="gap-2 border-border hover:border-investing hover:text-investing"
             >
-              <Link href="/investing/crypto-assessment">
+              <Link href="/dashboard/investing">
                 Yeni risk analizi
                 <LineChart className="h-4 w-4" />
               </Link>
@@ -435,7 +435,7 @@ function ActiveSummariesSection({
                 variant="outline"
                 className="gap-2 border-border hover:border-investing hover:text-investing"
               >
-                <Link href="/new-dashboard/investing">
+                <Link href="/dashboard/investing">
                   Detayları aç
                   <ArrowRight className="h-4 w-4" />
                 </Link>
@@ -662,7 +662,7 @@ function EmptyState() {
           </p>
           <div className="flex flex-wrap gap-3">
             <Button asChild className="gap-2 bg-sport px-4 py-2 text-background shadow-sm">
-              <Link href="/dashboard/sport/workout-plan">
+              <Link href="/dashboard/sport">
                 Plan oluştur
                 <Dumbbell className="h-4 w-4" />
               </Link>
@@ -672,7 +672,7 @@ function EmptyState() {
               variant="outline"
               className="gap-2 border-border hover:border-investing hover:text-investing"
             >
-              <Link href="/investing/crypto-assessment">
+              <Link href="/dashboard/investing">
                 Analiz başlat
                 <LineChart className="h-4 w-4" />
               </Link>
@@ -841,7 +841,7 @@ function buildRecentActivities(
     description: `${formatLevel(plan.level)} · ${formatMinutes(plan.duration_per_day)}`,
     timestamp: plan.created_at ?? new Date().toISOString(),
     relativeTime: formatRelativeTime(plan.created_at ?? new Date().toISOString()),
-    href: `/dashboard-legacy/plans/${plan.id}`,
+    href: `/dashboard/sport/workout-plans/${plan.id}`,
     icon: "🏋️",
     accentClass: "text-sport",
   }));

@@ -10,6 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **GitHub Secrets Integration - Enhanced deployment workflows**
+  - Updated `.github/workflows/deploy.yml` with complete OCI secrets injection
+  - Updated `.github/workflows/deploy-test.yml` with complete OCI secrets injection
+  - Added OCI_ACCESS_KEY_ID, OCI_SECRET_ACCESS_KEY, OCI_ENDPOINT, OCI_BUCKET_NAME, OCI_REGION secrets
+  - Added N8N_URL, N8N_API_KEY, N8N_SOCIAL_MEDIA_WEBHOOK_URL secrets
+  - Enhanced .env file creation with all required environment variables
+  - Added comprehensive GitHub Secrets documentation to README.md
+  - Updated DEPLOYMENT_CHECKLIST.md with GitHub Secrets setup instructions
+  - Documented automated deployment process and environment separation
+  - Added complete secrets table with descriptions and examples
+  - Implemented proper environment variable injection before Docker build step
 - **Social Media Feature - Added project_type field**
   - Added ProjectType enum with text_to_image, image_to_image, image_to_video options
   - Added project_type field to all social media interfaces and types

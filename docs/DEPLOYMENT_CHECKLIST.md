@@ -68,38 +68,88 @@ This document provides a comprehensive checklist for deploying the CEKUAI projec
 
 ### Environment Setup
 
+#### GitHub Secrets Configuration
+
+Before deployment, ensure all required GitHub Secrets are configured in the repository settings:
+
+**Required Secrets:**
+- `EXERCISEDB_API_KEY` - Exercise database API key
+- `OPENAI_API_KEY` - OpenAI API key for AI features
+- `NEXTAUTH_SECRET` - NextAuth.js secret for JWT signing
+- `NEXT_PUBLIC_SUPABASE_URL` - Supabase project URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - Supabase anonymous key
+- `SUPABASE_SERVICE_ROLE_KEY` - Supabase service role key
+- `UPSTASH_REDIS_REST_URL` - Upstash Redis REST URL
+- `UPSTASH_REDIS_REST_TOKEN` - Upstash Redis REST token
+- `N8N_URL` - n8n instance URL
+- `N8N_API_KEY` - n8n API key
+- `OCI_ACCESS_KEY_ID` - Oracle Cloud Infrastructure access key
+- `OCI_SECRET_ACCESS_KEY` - Oracle Cloud Infrastructure secret key
+- `OCI_ENDPOINT` - OCI endpoint URL
+- `OCI_BUCKET_NAME` - OCI bucket name for file storage
+- `OCI_REGION` - OCI region
+- `N8N_SOCIAL_MEDIA_WEBHOOK_URL` - n8n webhook URL for social media
+- `OCI_SSH_KEY` - SSH private key for OCI server access
+- `OCI_HOST` - OCI server hostname/IP
+
+**Setup Instructions:**
+1. Go to GitHub repository → Settings → Secrets and variables → Actions
+2. Click "New repository secret"
+3. Add each secret with the exact name and value
+4. Secrets are automatically injected during deployment workflows
+
 #### Production Environment Variables
+
+The deployment workflow automatically creates a `.env` file from GitHub Secrets:
+
 ```env
-# Next.js
-NODE_ENV=production
-NEXT_PUBLIC_APP_URL=https://your-domain.com
-
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
-
-# NextAuth
-NEXTAUTH_URL=https://your-domain.com
-NEXTAUTH_SECRET=your_nextauth_secret
-
-# n8n
-N8N_URL=https://your-n8n-instance.com
-N8N_API_KEY=your_n8n_api_key
-
-# Upstash Redis
-UPSTASH_REDIS_REST_URL=your_redis_url
-UPSTASH_REDIS_REST_TOKEN=your_redis_token
-
-# Sentry
-NEXT_PUBLIC_SENTRY_DSN=your_sentry_dsn
-SENTRY_AUTH_TOKEN=your_sentry_token
-
-# Rate Limiting
-RATELIMIT_ENABLED=true
+# Automatically generated from GitHub Secrets during deployment
+EXERCISEDB_API_KEY=${{ secrets.EXERCISEDB_API_KEY }}
+OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+NEXT_PUBLIC_API_URL=http://${{ secrets.OCI_HOST }}:3000
+NEXTAUTH_URL=http://${{ secrets.OCI_HOST }}:3000
+NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+UPSTASH_REDIS_REST_URL=${{ secrets.UPSTASH_REDIS_REST_URL }}
+UPSTASH_REDIS_REST_TOKEN=${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+N8N_URL=${{ secrets.N8N_URL }}
+N8N_API_KEY=${{ secrets.N8N_API_KEY }}
+OCI_ACCESS_KEY_ID=${{ secrets.OCI_ACCESS_KEY_ID }}
+OCI_SECRET_ACCESS_KEY=${{ secrets.OCI_SECRET_ACCESS_KEY }}
+OCI_ENDPOINT=${{ secrets.OCI_ENDPOINT }}
+OCI_BUCKET_NAME=${{ secrets.OCI_BUCKET_NAME }}
+OCI_REGION=${{ secrets.OCI_REGION }}
+N8N_SOCIAL_MEDIA_WEBHOOK_URL=${{ secrets.N8N_SOCIAL_MEDIA_WEBHOOK_URL }}
 ```
 
 ### Deployment Steps
+
+#### Automated Deployment (GitHub Actions)
+
+The project uses GitHub Actions for automated deployment to OCI:
+
+**Production Deployment:**
+- Triggered on push to `main` branch
+- Workflow: `.github/workflows/deploy.yml`
+- Environment: Production (port 3000)
+
+**Test Deployment:**
+- Triggered on push to `test` branch  
+- Workflow: `.github/workflows/deploy-test.yml`
+- Environment: Test (port 3001)
+
+**Deployment Process:**
+1. Code is pushed to respective branch
+2. GitHub Actions workflow triggers
+3. SSH connection established to OCI server
+4. Code is pulled/updated on server
+5. `.env` file is created from GitHub Secrets
+6. Docker containers are built and deployed
+7. Health checks are performed
+
+#### Manual Deployment
 
 #### 1. Build Application
 ```bash

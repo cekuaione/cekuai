@@ -38,6 +38,7 @@ jobs:
             git clone -b test https://github.com/cekuaione/cekuai.git .
           fi
 
+          # Create .env file from GitHub Secrets
           printf "%s\n" \
             "EXERCISEDB_API_KEY=${{ secrets.EXERCISEDB_API_KEY }}" \
             "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" \
@@ -49,6 +50,14 @@ jobs:
             "SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
             "UPSTASH_REDIS_REST_URL=${{ secrets.UPSTASH_REDIS_REST_URL }}" \
             "UPSTASH_REDIS_REST_TOKEN=${{ secrets.UPSTASH_REDIS_REST_TOKEN }}" \
+            "N8N_URL=${{ secrets.N8N_URL }}" \
+            "N8N_API_KEY=${{ secrets.N8N_API_KEY }}" \
+            "OCI_ACCESS_KEY_ID=${{ secrets.OCI_ACCESS_KEY_ID }}" \
+            "OCI_SECRET_ACCESS_KEY=${{ secrets.OCI_SECRET_ACCESS_KEY }}" \
+            "OCI_ENDPOINT=${{ secrets.OCI_ENDPOINT }}" \
+            "OCI_BUCKET_NAME=${{ secrets.OCI_BUCKET_NAME }}" \
+            "OCI_REGION=${{ secrets.OCI_REGION }}" \
+            "N8N_SOCIAL_MEDIA_WEBHOOK_URL=${{ secrets.N8N_SOCIAL_MEDIA_WEBHOOK_URL }}" \
           > .env
 
           export APP_CONTAINER_NAME=cekuai-test

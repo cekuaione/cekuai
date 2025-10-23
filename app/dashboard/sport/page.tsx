@@ -203,7 +203,7 @@ function ActivePlanSection({ plan }: { plan: DisplayWorkoutPlan }) {
               variant="outline"
               className="gap-2 border-border hover:border-sport hover:text-sport"
             >
-              <Link href={`/dashboard-legacy/plans/${plan.id}`}>
+              <Link href={`/dashboard/sport/workout-plans/${plan.id}`}>
                 Planı görüntüle
                 <ArrowRight className="h-4 w-4" />
               </Link>
@@ -335,7 +335,7 @@ function RecentPlansSection({
           </h3>
         </div>
           <Link
-            href="/dashboard-legacy/plans"
+            href="/dashboard/sport/workout-plans"
             className="text-sm font-medium text-sport transition hover:underline"
           >
             Tümünü gör →
@@ -345,7 +345,7 @@ function RecentPlansSection({
         {plans.map((plan) => (
           <Link
             key={plan.id}
-            href={`/dashboard-legacy/plans/${plan.id}`}
+            href={`/dashboard/sport/workout-plans/${plan.id}`}
             className="flex flex-col gap-2 py-4 transition hover:bg-surface-muted/60 sm:grid sm:grid-cols-[minmax(0,1.4fr),minmax(0,1fr),auto] sm:items-center sm:gap-4"
           >
             <div>

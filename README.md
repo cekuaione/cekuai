@@ -132,6 +132,8 @@ cekuai/
 
 ## 🔑 Environment Variables
 
+### Local Development
+
 Create a `.env.local` file in the root directory:
 
 ```env
@@ -160,6 +162,48 @@ UPSTASH_REDIS_REST_TOKEN=your_redis_token
 NEXT_PUBLIC_SENTRY_DSN=your_sentry_dsn
 SENTRY_AUTH_TOKEN=your_sentry_token
 ```
+
+### GitHub Secrets for Deployment
+
+The following secrets must be configured in GitHub repository settings for automated deployment:
+
+#### Required Secrets
+
+| Secret Name | Description | Example |
+|-------------|-------------|---------|
+| `EXERCISEDB_API_KEY` | Exercise database API key | `abc123...` |
+| `OPENAI_API_KEY` | OpenAI API key for AI features | `sk-...` |
+| `NEXTAUTH_SECRET` | NextAuth.js secret for JWT signing | `random-string` |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | `https://xxx.supabase.co` |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous key | `eyJ...` |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key | `eyJ...` |
+| `UPSTASH_REDIS_REST_URL` | Upstash Redis REST URL | `https://xxx.upstash.io` |
+| `UPSTASH_REDIS_REST_TOKEN` | Upstash Redis REST token | `abc123...` |
+| `N8N_URL` | n8n instance URL | `https://n8n.your-domain.com` |
+| `N8N_API_KEY` | n8n API key | `abc123...` |
+| `OCI_ACCESS_KEY_ID` | Oracle Cloud Infrastructure access key | `ocid1...` |
+| `OCI_SECRET_ACCESS_KEY` | Oracle Cloud Infrastructure secret key | `abc123...` |
+| `OCI_ENDPOINT` | OCI endpoint URL | `https://objectstorage.region.oraclecloud.com` |
+| `OCI_BUCKET_NAME` | OCI bucket name for file storage | `cekuai-storage` |
+| `OCI_REGION` | OCI region | `us-phoenix-1` |
+| `N8N_SOCIAL_MEDIA_WEBHOOK_URL` | n8n webhook URL for social media | `https://n8n.domain.com/webhook/social-media` |
+| `OCI_SSH_KEY` | SSH private key for OCI server access | `-----BEGIN OPENSSH PRIVATE KEY-----` |
+| `OCI_HOST` | OCI server hostname/IP | `xxx.xxx.xxx.xxx` |
+
+#### Setting up GitHub Secrets
+
+1. Go to your GitHub repository
+2. Navigate to **Settings** → **Secrets and variables** → **Actions**
+3. Click **New repository secret**
+4. Add each secret with the exact name and value
+5. Secrets are automatically injected during deployment workflows
+
+#### Environment Separation
+
+- **Production**: Uses `main` branch secrets
+- **Test**: Uses `test` branch secrets (can have different values)
+
+For detailed deployment instructions, see [DEPLOYMENT_CHECKLIST.md](/docs/DEPLOYMENT_CHECKLIST.md).
 
 ---
 

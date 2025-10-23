@@ -171,7 +171,7 @@ function DashboardHeader() {
           variant="outline"
           className="gap-2 border-border hover:border-investing hover:text-investing"
         >
-          <Link href="/new-dashboard">
+          <Link href="/dashboard">
             Ana sayfaya dön
             <ArrowRight className="h-4 w-4" />
           </Link>
@@ -205,7 +205,7 @@ function ActiveTrackingsSection({
         </div>
         {totalCount > assessments.length && (
           <Link
-            href="/investing/assessments"
+            href="/dashboard/investing"
             className="text-sm font-medium text-investing transition hover:underline"
           >
             Tümünü gör →
@@ -217,7 +217,7 @@ function ActiveTrackingsSection({
         {assessments.map((assessment) => (
           <Link
             key={assessment.id}
-            href={`/investing/crypto-assessment/${assessment.id}`}
+            href={`/dashboard/investing/crypto-assessment/${assessment.id}`}
             className="group flex h-full flex-col justify-between rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:-translate-y-1 hover:border-investing/60 hover:shadow-md"
           >
             <div className="space-y-4">
@@ -348,7 +348,7 @@ function RecentAssessmentsSection({
           </h3>
         </div>
         <Link
-          href="/investing/assessments"
+          href="/dashboard/investing"
           className="text-sm font-medium text-investing transition hover:underline"
         >
           Arşivi aç →
@@ -363,7 +363,7 @@ function RecentAssessmentsSection({
           return (
             <Link
               key={assessment.id}
-              href={`/investing/crypto-assessment/${assessment.id}`}
+              href={`/dashboard/investing/crypto-assessment/${assessment.id}`}
               className="flex flex-col gap-2 py-4 transition hover:bg-surface-muted/60 sm:grid sm:grid-cols-[minmax(0,1.2fr),minmax(0,0.8fr),auto] sm:items-center sm:gap-4"
             >
               <div>
@@ -695,7 +695,7 @@ function ErrorState() {
             variant="outline"
             className="border-border hover:border-investing hover:text-investing"
           >
-            <Link href="/new-dashboard/investing" prefetch={false}>
+            <Link href="/dashboard/investing" prefetch={false}>
               Sayfayı yenile
             </Link>
           </Button>
