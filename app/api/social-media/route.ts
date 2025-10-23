@@ -31,9 +31,9 @@ const requestSchema = z.object({
 export async function POST(req: NextRequest) {
   console.log("🚀 [SOCIAL-MEDIA] Starting project generation");
   console.log("🔧 [SOCIAL-MEDIA] Environment check", {
-    hasWebhookUrl: Boolean(process.env.NEXT_PUBLIC_N8N_SOCIAL_MEDIA_WEBHOOK_URL),
-    webhookUrlPreview: process.env.NEXT_PUBLIC_N8N_SOCIAL_MEDIA_WEBHOOK_URL
-      ? `${process.env.NEXT_PUBLIC_N8N_SOCIAL_MEDIA_WEBHOOK_URL.slice(0, 40)}...`
+    hasWebhookUrl: Boolean(process.env.N8N_SOCIAL_MEDIA_WEBHOOK_URL),
+    webhookUrlPreview: process.env.N8N_SOCIAL_MEDIA_WEBHOOK_URL
+      ? `${process.env.N8N_SOCIAL_MEDIA_WEBHOOK_URL.slice(0, 40)}...`
       : null,
     hasSupabaseUrl: Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL),
     hasServiceKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
@@ -92,10 +92,22 @@ export async function POST(req: NextRequest) {
       operationType: payload.operationType,
     });
 
-    const webhookUrl = process.env.NEXT_PUBLIC_N8N_SOCIAL_MEDIA_WEBHOOK_URL;
+    const webhookUrl = process.env.N8N_SOCIAL_MEDIA_WEBHOOK_URL || "https://cekuai.duckdns.org/webhook/social-media-image-transform";
+    
+    console.log("🔗 [SOCIAL-MEDIA] Webhook URL resolved", {
+      webhookUrl: webhookUrl.slice(0, 50) + "...",
+      isFromEnv: Boolean(process.env.N8N_SOCIAL_MEDIA_WEBHOOK_URL),
+      isFallback: !process.env.N8N_SOCIAL_MEDIA_WEBHOOK_URL,
+    });
+    
     if (!webhookUrl) {
       console.warn("⚠️ [SOCIAL-MEDIA] Webhook URL not configured, skipping webhook call");
     } else {
+      console.log("📤 [SOCIAL-MEDIA] Sending webhook payload", {
+        url: webhookUrl,
+        payload: webhookPayload,
+      });
+      
       const webhookResponse = await fetch(webhookUrl, {
         method: "POST",
         headers: {

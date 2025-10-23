@@ -62,6 +62,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Social Media Feature - Fixed status field constraint violation**
   - Updated ProjectStatus enum to match database CHECK constraint: pending, processing, completed, failed
   - Changed initial status from "generating" to "pending" in API and database operations
+- **Social Media Feature - Fixed webhook not triggering in production**
+  - Changed environment variable from NEXT_PUBLIC_N8N_SOCIAL_MEDIA_WEBHOOK_URL to N8N_SOCIAL_MEDIA_WEBHOOK_URL
+  - Added fallback hardcoded URL for immediate webhook functionality
+  - Enhanced logging for webhook debugging and troubleshooting
+  - Fixed server-side environment variable access in API routes
   - Updated status labels for proper Turkish localization
   - Fixed database insert operations to use correct status values
 - **Social Media Feature - Fixed Next.js Image hostname error**
