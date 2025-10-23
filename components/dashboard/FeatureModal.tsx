@@ -561,6 +561,30 @@ function FieldRenderer({ field, value, error, onChange, onFocus, onBlur }: Field
           {errorMessage}
         </div>
       );
+    case "custom":
+      if (field.component && field.componentProps) {
+        const CustomComponent = field.component;
+        return (
+          <div className="mb-4 space-y-1">
+            {commonLabel}
+            <CustomComponent
+              {...field.componentProps}
+              defaultUrl={value as string}
+              onImageReady={(url: string) => {
+                handleFocus();
+                onChange(url);
+              }}
+              onError={(error: string) => {
+                // Handle error - could be passed to parent or shown in UI
+                console.error("ImageUpload error:", error);
+              }}
+            />
+            {helper}
+            {errorMessage}
+          </div>
+        );
+      }
+      return null;
     default:
       return null;
   }

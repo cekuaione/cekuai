@@ -1,3 +1,5 @@
+import type React from "react";
+
 export type FeatureCategory = "sport" | "investing" | "business" | "education";
 
 export interface FeatureModalConfig<FormData = Record<string, unknown>, Result = unknown> {
@@ -28,7 +30,8 @@ export type FormFieldType =
   | "text"
   | "textarea"
   | "cards"
-  | "number";
+  | "number"
+  | "custom";
 
 export interface FormField {
   id: string;
@@ -43,6 +46,9 @@ export interface FormField {
   min?: number;
   max?: number;
   step?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  component?: React.ComponentType<any>; // For custom components
+  componentProps?: Record<string, unknown>; // Props to pass to custom component
 }
 
 export interface FieldOption {

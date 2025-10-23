@@ -17,6 +17,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated database schema to include project_type field (NOT NULL)
   - Set fixed value "image_to_image" for current feature implementation
   - Updated n8n webhook payload to include projectType parameter
+- **Landing Page - Added Social Media feature card**
+  - Added Social Media feature card to marketing landing page
+  - Positioned between Investing and Food categories for logical flow
+  - Used purple/pink theme consistent with existing design patterns
+  - Includes proper navigation to /dashboard/social-media
+  - Features Turkish description: "AI görsel dönüşümü ve stil transferi araçları."
+- **Upload API - Created temp image upload with OCI pre-signed URLs**
+  - Added POST endpoint at `/api/upload/temp-image` for authenticated users
+  - Supports file validation: max 10MB, JPEG/PNG/WebP/GIF only
+  - Generates secure pre-signed URLs for direct OCI S3 uploads
+  - Returns both upload and download URLs with 1-hour expiry
+  - Includes filename sanitization and proper error handling
+  - Uses existing OCI environment configuration
+- **Social Media Feature - Created drag & drop image upload component**
+  - Added ImageUpload component with dual input modes (URL and file upload)
+  - Implemented full drag & drop functionality with visual feedback
+  - Includes file validation, progress tracking, and error handling
+  - Supports image preview and removal functionality
+  - Integrated with OCI pre-signed URL upload system
+  - Uses shadcn/ui components for consistent styling
+- **Social Media Feature - Integrated ImageUpload into modal system**
+  - Extended modal types to support custom components
+  - Updated FeatureModal to render custom field components
+  - Replaced text input with ImageUpload component in Social Media modal
+  - Maintained existing form validation and error handling
+  - Preserved modal structure and AI assistant integration
+- **Social Media Feature - Enhanced ImageUpload URL validation**
+  - Fixed URL tab validation to properly trigger onImageReady callback
+  - Added automatic URL validation with HTTP/HTTPS protocol checking
+  - Implemented auto-submission on blur and Enter key press
+  - Removed confusing external link button from URL input
+  - Added visual feedback for valid URL detection
+  - Fixed form validation errors for URL inputs
+  - Enhanced user experience with real-time validation feedback
+- **Social Media Feature - Added external link preview for URL inputs**
+  - Added external link button next to URL input field
+  - Button appears only when valid HTTP/HTTPS URL is entered
+  - Opens URL in new tab for preview before submission
+  - Includes tooltip "Yeni sekmede aç" for better UX
+  - Maintains clean layout with flex container design
 
 ### Fixed
 - **Social Media Feature - Fixed status field constraint violation**

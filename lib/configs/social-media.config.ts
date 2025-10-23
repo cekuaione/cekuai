@@ -1,5 +1,6 @@
 import type { FeatureModalConfig } from "@/lib/types/modal";
 import { OperationType, OPERATION_LABELS, OPERATION_ICONS, ProjectType } from "@/lib/types/social-media";
+import { ImageUpload } from "@/components/social-media/ImageUpload";
 
 type SocialMediaModalFormData = {
   imageUrl?: string;
@@ -71,11 +72,14 @@ export const socialMediaConfig: FeatureModalConfig = {
       fields: [
         {
           id: "imageUrl",
-          type: "text",
-          label: "Görsel URL'si",
-          placeholder: "https://example.com/image.jpg",
+          type: "custom",
+          label: "Görsel",
           required: true,
-          helperText: "Görselin URL adresini buraya yapıştır",
+          helperText: "Görseli URL ile veya dosya yükleyerek ekleyin",
+          component: ImageUpload,
+          componentProps: {
+            defaultUrl: "", // Will be set dynamically
+          },
         },
         {
           id: "projectName",

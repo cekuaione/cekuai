@@ -51,6 +51,15 @@ const CATEGORY_STYLES: Record<
     badgeBorder: "border-investing/40",
     badgeText: "text-investing",
   },
+  "Social Media": {
+    cardBg: "bg-purple-50/70",
+    cardBorder: "border-purple-400/40",
+    title: "text-purple-600",
+    link: "text-purple-600",
+    badgeBg: "bg-purple-50",
+    badgeBorder: "border-purple-400/40",
+    badgeText: "text-purple-600",
+  },
   Food: {
     cardBg: "bg-surface-muted/80",
     cardBorder: "border-border/60",
@@ -93,6 +102,13 @@ const categories: Category[] = [
     title: "Investing",
     description: "Crypto risk assessment and portfolio analysis tools.",
     dashboardHref: "/investing",
+    isActive: true,
+  },
+  {
+    icon: "🎨",
+    title: "Social Media",
+    description: "AI görsel dönüşümü ve stil transferi araçları.",
+    dashboardHref: "/dashboard/social-media",
     isActive: true,
   },
   {
