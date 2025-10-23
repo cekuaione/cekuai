@@ -547,6 +547,14 @@ function QuickActionsSection() {
       icon: "💰",
     },
     {
+      title: "Social Media",
+      description: "AI destekli görsel dönüşümü ve yaratıcı araçlar.",
+      href: "/dashboard/social-media",
+      accent: "text-business",
+      badge: null,
+      icon: "🎨",
+    },
+    {
       title: "Business",
       description: "Ekip içi otomasyon ve karar destek araçları yakında.",
       href: "/dashboard/business",

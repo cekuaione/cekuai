@@ -9,6 +9,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **Social Media Feature - Added project_type field**
+  - Added ProjectType enum with text_to_image, image_to_image, image_to_video options
+  - Added project_type field to all social media interfaces and types
+  - Added project_type validation and helper functions
+  - Updated database schema to include project_type field (NOT NULL)
+  - Set fixed value "image_to_image" for current feature implementation
+  - Updated n8n webhook payload to include projectType parameter
+
+### Fixed
+- **Social Media Feature - Fixed status field constraint violation**
+  - Updated ProjectStatus enum to match database CHECK constraint: pending, processing, completed, failed
+  - Changed initial status from "generating" to "pending" in API and database operations
+  - Updated status labels for proper Turkish localization
+  - Fixed database insert operations to use correct status values
+- **Social Media Feature - Fixed Next.js Image hostname error**
+  - Added `unoptimized={true}` prop to input image display in project detail page
+  - Allows external domain images without requiring hostname whitelist configuration
+  - Output images continue using optimized Next.js Image component via API proxy
+- **Social Media Feature - Fixed client component event handler error**
+  - Created DownloadButton client component to handle download functionality
+  - Extracted onClick handler from server component to prevent "Event handlers cannot be passed to Client Component props" error
+  - Maintained server component architecture for project detail page
+
+### Removed
+- **Social Media Feature - Removed strength parameter**
+  - Removed strength slider from social media transformation modal
+  - Removed strength parameter from API request payload
+  - Removed strength field from database schema and types
+  - Updated n8n webhook payload to only include: userId, projectId, operationType, imageUrl
+  - Simplified form flow by removing settings step
+  - Fixed dashboard UI to remove strength display elements
+  - Fixed API endpoints to remove strength from response payloads
+
 ### Changed
 - **Dashboard route swap - NEW becomes default**
   - Moved NEW dashboard from `/new-dashboard` to `/dashboard` (now default)

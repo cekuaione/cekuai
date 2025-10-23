@@ -24,6 +24,7 @@ const NAVIGATION: { main: NavItem[]; footer: NavItem[] } = {
     { icon: "🏠", label: "Ana Sayfa", href: "/dashboard", id: "home" },
     { icon: "🏋️", label: "Sport", href: "/dashboard/sport", id: "sport" },
     { icon: "💰", label: "Investing", href: "/dashboard/investing", id: "investing" },
+    { icon: "🎨", label: "Social Media", href: "/dashboard/social-media", id: "social-media" },
     { icon: "📊", label: "Business", href: "/dashboard/business", id: "business", comingSoon: true },
     { icon: "🎓", label: "Education", href: "/dashboard/education", id: "education", comingSoon: true },
   ],
@@ -64,6 +65,14 @@ const CATEGORY_ACCENTS: Record<
     badgeBg: "bg-investing-soft",
     badgeBorder: "border-investing/40",
     badgeText: "text-investing",
+  },
+  "social-media": {
+    activeBg: "bg-business-soft",
+    activeText: "text-business",
+    border: "border-business",
+    badgeBg: "bg-business-soft",
+    badgeBorder: "border-business/40",
+    badgeText: "text-business",
   },
   business: {
     activeBg: "bg-business-soft",

@@ -131,6 +131,51 @@ export type Database = {
         }
         Relationships: []
       }
+      social_media_projects: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          file_path: string | null
+          id: string
+          input_image_url: string
+          operation_type: string
+          output_image_url: string | null
+          project_name: string | null
+          project_type: string
+          status: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          file_path?: string | null
+          id?: string
+          input_image_url: string
+          operation_type: string
+          output_image_url?: string | null
+          project_name?: string | null
+          project_type: string
+          status?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          file_path?: string | null
+          id?: string
+          input_image_url?: string
+          operation_type?: string
+          output_image_url?: string | null
+          project_name?: string | null
+          project_type?: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
