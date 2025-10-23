@@ -42,6 +42,7 @@ jobs:
             "EXERCISEDB_API_KEY=${{ secrets.EXERCISEDB_API_KEY }}" \
             "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" \
             "NEXT_PUBLIC_API_URL=http://${{ secrets.OCI_HOST }}:3000" \
+            "NEXTAUTH_URL=http://${{ secrets.OCI_HOST }}:3000" \
             "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" \
             "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" \
             "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" \

@@ -67,6 +67,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added fallback hardcoded URL for immediate webhook functionality
   - Enhanced logging for webhook debugging and troubleshooting
   - Fixed server-side environment variable access in API routes
+- **Production Environment - Fixed localhost URL references**
+  - Added missing NEXTAUTH_URL environment variable to deployment workflows
+  - Updated Dockerfile and docker-compose.yml to include NEXTAUTH_URL
+  - Fixed NextAuth redirect URLs to use production domain instead of localhost
+  - Ensured proper environment variable configuration for production deployments
   - Updated status labels for proper Turkish localization
   - Fixed database insert operations to use correct status values
 - **Social Media Feature - Fixed Next.js Image hostname error**
