@@ -176,6 +176,13 @@ export const workoutPlanConfig: FeatureModalConfig = {
       description: "Hedefine göre daha detaylı bilgi alalım",
       fields: [
         // This will be populated dynamically based on goal selection
+        // Temporary placeholder to prevent validation issues
+        {
+          id: "placeholder",
+          type: "hidden",
+          label: "Placeholder",
+          required: false,
+        },
       ],
     },
     // STEP 3 - Experience & Safety

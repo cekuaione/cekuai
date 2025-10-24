@@ -41,15 +41,15 @@ export const step3Schema = z.object({
 
 // Step 4 validation
 export const step4Schema = z.object({
-  daysPerWeek: z.enum(["3", "4", "5", "6"]),
-  durationPerDay: z.enum(["30", "45", "60", "90"]),
+  daysPerWeek: z.union([z.enum(["3", "4", "5", "6"]), z.number().min(3).max(6)]),
+  durationPerDay: z.union([z.enum(["30", "45", "60", "90"]), z.number().min(30).max(90)]),
   trainingTime: z.enum(["morning", "midday", "evening", "flexible"]),
   equipment: z.array(z.enum(WORKOUT_EQUIPMENT_VALUES)).default([]),
 });
 
 // Step 5 validation
 export const step5Schema = z.object({
-  targetWeeks: z.enum(["4", "6", "8"]),
+  targetWeeks: z.union([z.enum(["4", "6", "8"]), z.number().min(4).max(8)]),
   notes: z.string().optional(),
 });
 
