@@ -156,7 +156,9 @@ export async function POST(req: NextRequest) {
   let body: unknown;
   try {
     body = await req.json();
+    console.log("📥 [API] Received body:", JSON.stringify(body, null, 2));
   } catch {
+    console.error("❌ [API] Invalid JSON payload");
     return NextResponse.json({ error: "Invalid JSON payload" }, { status: 400 });
   }
 
@@ -168,14 +170,16 @@ export async function POST(req: NextRequest) {
   if (enhancedParseResult.success) {
     payload = enhancedParseResult.data;
     isEnhanced = true;
-    console.log("✅ [GENERATE] Using enhanced schema");
+    console.log("✅ [API] Using enhanced schema");
   } else {
+    console.log("❌ [API] Enhanced schema validation failed:", enhancedParseResult.error.issues);
     const legacyParseResult = legacyRequestSchema.safeParse(body);
     if (legacyParseResult.success) {
       payload = legacyParseResult.data;
       isEnhanced = false;
-      console.log("✅ [GENERATE] Using legacy schema");
+      console.log("✅ [API] Using legacy schema");
     } else {
+      console.log("❌ [API] Legacy schema validation also failed:", legacyParseResult.error.issues);
       const issue = enhancedParseResult.error.issues[0] || legacyParseResult.error.issues[0];
       return NextResponse.json({ error: issue?.message ?? "Validation error" }, { status: 400 });
     }

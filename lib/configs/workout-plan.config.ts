@@ -8,11 +8,18 @@ type WorkoutModalFormData = {
   durationPerDay?: number;
   equipment?: unknown;
   notes?: string;
-  // Goal-specific fields
-  muscleDetails?: unknown;
-  weightLossDetails?: unknown;
-  enduranceDetails?: unknown;
-  generalFitnessDetails?: unknown;
+  // Goal-specific individual fields (from dynamic form)
+  targetAreas?: unknown;
+  priority?: string;
+  phase?: string;
+  cardioPreference?: string;
+  activityLevel?: string;
+  musclePriority?: string;
+  sportType?: string;
+  currentLevel?: string;
+  specificGoal?: string;
+  mainFocus?: string;
+  lifestyle?: string;
   // Experience & safety fields
   injuries?: unknown;
   injuryDetails?: string;
@@ -70,6 +77,9 @@ function normalizeDuration(value: unknown): 30 | 45 | 60 | 90 {
 async function submitWorkoutPlan(formData: Record<string, unknown>) {
   const data = formData as WorkoutModalFormData;
 
+  console.log("🔍 [FORM] Raw form data:", formData);
+  console.log("🔍 [FORM] Parsed data:", data);
+
   const payload = {
     // Basic fields
     goal: typeof data.goal === "string" ? data.goal : "muscle",
@@ -85,11 +95,34 @@ async function submitWorkoutPlan(formData: Record<string, unknown>) {
     compoundMovements: Array.isArray(data.compoundMovements) ? data.compoundMovements.map((item) => String(item)) : [],
     targetWeeks: typeof data.targetWeeks === "number" ? data.targetWeeks : 6,
     
-    // Goal-specific details
-    ...(data.muscleDetails ? { muscleGoalDetails: data.muscleDetails } : {}),
-    ...(data.weightLossDetails ? { weightLossDetails: data.weightLossDetails } : {}),
-    ...(data.enduranceDetails ? { enduranceDetails: data.enduranceDetails } : {}),
-    ...(data.generalFitnessDetails ? { generalFitnessDetails: data.generalFitnessDetails } : {}),
+    // Goal-specific details - group individual fields into detail objects
+    ...(data.goal === "muscle" && data.targetAreas && data.priority && data.phase ? {
+      muscleGoalDetails: {
+        targetAreas: Array.isArray(data.targetAreas) ? data.targetAreas : [data.targetAreas],
+        priority: data.priority,
+        phase: data.phase,
+      }
+    } : {}),
+    ...(data.goal === "weight_loss" && data.cardioPreference && data.activityLevel && data.musclePriority ? {
+      weightLossDetails: {
+        cardioPreference: data.cardioPreference,
+        activityLevel: data.activityLevel,
+        musclePriority: data.musclePriority,
+      }
+    } : {}),
+    ...(data.goal === "endurance" && data.sportType && data.currentLevel ? {
+      enduranceDetails: {
+        sportType: data.sportType,
+        currentLevel: data.currentLevel,
+        ...(data.specificGoal ? { specificGoal: data.specificGoal } : {}),
+      }
+    } : {}),
+    ...(data.goal === "general_fitness" && data.mainFocus && data.lifestyle ? {
+      generalFitnessDetails: {
+        mainFocus: data.mainFocus,
+        lifestyle: data.lifestyle,
+      }
+    } : {}),
     
     // Optional fields
     ...(data.notes && typeof data.notes === "string" && data.notes.trim().length
@@ -99,6 +132,8 @@ async function submitWorkoutPlan(formData: Record<string, unknown>) {
       ? { injuryDetails: data.injuryDetails.trim() }
       : {}),
   };
+
+  console.log("📤 [FORM] Final payload:", payload);
 
   const response = await fetch("/api/workout/generate", {
     method: "POST",

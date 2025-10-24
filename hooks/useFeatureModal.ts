@@ -140,10 +140,17 @@ export function useFeatureModal<Result = unknown>(
   }, [config.formSteps.length]);
 
   const submit = useCallback(async () => {
+    console.log("🚀 [MODAL] Submit function called");
+    console.log("🔍 [MODAL] Form data:", state.formData);
+    console.log("🔍 [MODAL] Current step:", state.currentStep);
+    console.log("🔍 [MODAL] Total steps:", config.formSteps.length);
+
     // Validate all steps
     for (let index = 0; index < config.formSteps.length; index += 1) {
       const result = runStepValidation(index);
+      console.log(`🔍 [MODAL] Step ${index} validation:`, result);
       if (!result.valid) {
+        console.log(`❌ [MODAL] Validation failed on step ${index}`);
         setState((prev) => ({
           ...prev,
           currentStep: index,
@@ -153,6 +160,8 @@ export function useFeatureModal<Result = unknown>(
       }
     }
 
+    console.log("✅ [MODAL] All validation passed, calling onSubmit");
+
     setState((prev) => ({
       ...prev,
       isSubmitting: true,
@@ -161,7 +170,9 @@ export function useFeatureModal<Result = unknown>(
     setView("loading");
 
     try {
+      console.log("📤 [MODAL] Calling config.onSubmit with:", state.formData);
       const result = await config.onSubmit(state.formData);
+      console.log("✅ [MODAL] onSubmit success:", result);
       setState((prev) => ({
         ...prev,
         isSubmitting: false,
@@ -170,6 +181,7 @@ export function useFeatureModal<Result = unknown>(
       setView("success");
       config.onSuccess?.(result, state.formData);
     } catch (error) {
+      console.error("❌ [MODAL] onSubmit error:", error);
       const message = error instanceof Error ? error.message : "İşlem sırasında hata oluştu";
       setState((prev) => ({
         ...prev,
