@@ -27,8 +27,6 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-# Clean up node_modules before build to save space
-RUN rm -rf node_modules && npm ci
 # Build with optimizations and reduced memory usage
 RUN NODE_OPTIONS="--max-old-space-size=2048" npm run build
 # Clean up build cache and temporary files
