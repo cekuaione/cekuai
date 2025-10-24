@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "eslint",
     "clean": "rm -rf .next out build dist node_modules/.cache .npm",
-    "optimize": "./scripts/optimize-build.sh"
+    "optimize": "./scripts/optimize-build.sh",
+    "migrate:profiles": "npx tsx scripts/migrate-profiles.ts"
   },
   "dependencies": {
     "@auth/supabase-adapter": "^1.11.0",

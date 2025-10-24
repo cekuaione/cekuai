@@ -77,6 +77,23 @@ export function SignUpForm() {
         return
       }
 
+      // Create profile in profiles table
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .insert({
+          id: data.user.id,
+          full_name: fullName,
+          avatar_url: null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+
+      if (profileError) {
+        console.error('Failed to create profile:', profileError)
+        // Don't fail the sign-up if profile creation fails, but log it
+        toast.error("Hesap oluşturuldu ancak profil oluşturulamadı", { id: toastId })
+      }
+
       // Check if email confirmation is required
       if (data.user.email_confirmed_at === null) {
         toast.success("✅ Hesabınız oluşturuldu! 📧", {

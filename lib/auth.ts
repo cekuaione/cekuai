@@ -80,6 +80,40 @@ providers.push(
         throw new Error(error?.message || 'Invalid credentials')
       }
 
+      // Ensure profile exists for credentials users
+      try {
+        const serviceSupabase = createClient(NEXT_PUBLIC_SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!)
+        
+        // Check if profile exists
+        const { data: existingProfile } = await serviceSupabase
+          .from('profiles')
+          .select('id')
+          .eq('id', data.user.id)
+          .single()
+        
+        if (!existingProfile) {
+          // Create profile for credentials user
+          const { error: profileError } = await serviceSupabase
+            .from('profiles')
+            .insert({
+              id: data.user.id,
+              full_name: data.user.user_metadata?.full_name || data.user.email?.split('@')[0] || null,
+              avatar_url: data.user.user_metadata?.avatar_url || null,
+              created_at: data.user.created_at || new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            })
+          
+          if (profileError) {
+            console.error('Failed to create profile for credentials user:', profileError)
+          } else {
+            console.log('Created profile for credentials user:', data.user.id)
+          }
+        }
+      } catch (error) {
+        console.error('Error ensuring profile for credentials user:', error)
+        // Don't fail authentication
+      }
+
       const user = {
         id: data.user.id,
         email: data.user.email,
@@ -119,13 +153,53 @@ export const authOptions: NextAuthOptions = {
     verifyRequest: '/auth/signin',
   },
   callbacks: {
-    async signIn({ account, profile }) {
+    async signIn({ account, profile, user }) {
       // Credentials provider always returns true
       if (account?.provider === 'credentials') return true
-      // Google OAuth: ensure verified email
+      
+      // Google OAuth: ensure verified email and create profile
       if (account?.provider === 'google') {
         const emailVerified = (profile as { email_verified?: boolean })?.email_verified
-        return !!emailVerified
+        if (!emailVerified) return false
+        
+        // Create profile for Google OAuth users
+        if (user?.id) {
+          try {
+            const supabase = createClient(NEXT_PUBLIC_SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!)
+            
+            // Check if profile already exists
+            const { data: existingProfile } = await supabase
+              .from('profiles')
+              .select('id')
+              .eq('id', user.id)
+              .single()
+            
+            if (!existingProfile) {
+              // Create new profile
+              const { error } = await supabase
+                .from('profiles')
+                .insert({
+                  id: user.id,
+                  full_name: (profile as { name?: string })?.name || user.email?.split('@')[0] || null,
+                  avatar_url: (profile as { picture?: string })?.picture || null,
+                  created_at: new Date().toISOString(),
+                  updated_at: new Date().toISOString(),
+                })
+              
+              if (error) {
+                console.error('Failed to create profile for Google user:', error)
+                // Don't fail sign-in, but log the error
+              } else {
+                console.log('Created profile for Google user:', user.id)
+              }
+            }
+          } catch (error) {
+            console.error('Error creating profile for Google user:', error)
+            // Don't fail sign-in
+          }
+        }
+        
+        return true
       }
       return true
     },
