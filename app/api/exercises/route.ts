@@ -50,6 +50,9 @@ export async function GET(request: NextRequest) {
     }
 
     const { equipment, bodyPart, targetMuscle, search, limit } = parseResult.data;
+    
+    // Convert equipment to lowercase for case-insensitive matching
+    const normalizedEquipment = equipment?.toLowerCase();
 
     console.log("🔍 [API] Querying exercises", {
       equipment,
@@ -67,8 +70,8 @@ export async function GET(request: NextRequest) {
       .select("*", { count: "exact" });
 
     // Apply filters
-    if (equipment) {
-      query = query.contains("equipments", [equipment]);
+    if (normalizedEquipment) {
+      query = query.contains("equipments", [normalizedEquipment]);
     }
 
     if (bodyPart) {
@@ -91,7 +94,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       console.error("❌ [DB] Error querying exercises", {
         error: error.message,
-        query: { equipment, bodyPart, targetMuscle, search, limit },
+        query: { equipment: normalizedEquipment, bodyPart, targetMuscle, search, limit },
       });
       return NextResponse.json(
         { error: "Database error" },
@@ -114,7 +117,7 @@ export async function GET(request: NextRequest) {
     console.log("✅ [API] Exercises query successful", {
       count: transformedData.length,
       total: count,
-      filters: { equipment, bodyPart, targetMuscle, search },
+      filters: { equipment: normalizedEquipment, bodyPart, targetMuscle, search },
     });
 
     // Add caching headers for 1 hour
