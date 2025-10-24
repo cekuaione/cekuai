@@ -32,8 +32,9 @@ ENV SUPABASE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY
 ENV UPSTASH_REDIS_REST_URL=$UPSTASH_REDIS_REST_URL
 ENV UPSTASH_REDIS_REST_TOKEN=$UPSTASH_REDIS_REST_TOKEN
 
-# Copy dependencies and source code
-COPY --from=deps /app/node_modules ./node_modules
+# Copy source code and install all dependencies (including devDependencies for build)
+COPY package.json package-lock.json* ./
+RUN npm ci --no-audit --no-fund
 COPY . .
 
 # Set production environment

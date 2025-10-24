@@ -6,9 +6,10 @@ The deployment is failing with `ENOSPC: no space left on device` error during th
 ## Root Cause
 The issue was caused by:
 1. **Next.js Standalone Output**: The `output: "standalone"` configuration was causing build issues
-2. **Memory Usage**: Build process was consuming too much memory
-3. **Build Context Size**: Large build context was causing space issues
-4. **Missing Route Files**: Build was failing to generate route.js files for API routes
+2. **Missing DevDependencies**: Dockerfile was removing devDependencies before build, but TypeScript and other build tools are needed
+3. **Memory Usage**: Build process was consuming too much memory
+4. **Build Context Size**: Large build context was causing space issues
+5. **Missing Route Files**: Build was failing to generate route.js files for API routes
 
 ## Solutions Implemented
 
@@ -17,7 +18,12 @@ The issue was caused by:
 - **Simplified configuration**: Removed complex webpack optimizations that were causing issues
 - **Fixed build process**: Now builds successfully without missing route files
 
-### 2. Dockerfile Optimizations
+### 2. Fixed Dockerfile TypeScript Issue
+- **Critical Fix**: Changed `npm ci --only=production` to `npm ci` in builder stage
+- **Reason**: Build process needs TypeScript and other devDependencies
+- **Result**: Build now has access to all required build tools
+
+### 3. Dockerfile Optimizations
 
 #### Original Dockerfile Issues:
 - No memory limits during build
@@ -33,14 +39,14 @@ The issue was caused by:
 - Multi-stage build optimization
 - Fixed for non-standalone builds
 
-### 2. Build Context Optimization
+### 4. Build Context Optimization
 
 #### `.dockerignore` File:
 - Excludes unnecessary files from build context
 - Reduces Docker build context size by ~80%
 - Excludes development files, logs, and temporary files
 
-### 3. Next.js Configuration Optimization
+### 5. Next.js Configuration Optimization
 
 #### `next.config.ts` Updates:
 - Memory-based worker count
@@ -48,7 +54,7 @@ The issue was caused by:
 - Reduced chunk sizes
 - Better caching strategies
 
-### 4. Build Scripts
+### 6. Build Scripts
 
 #### New Package.json Scripts:
 - `build:optimized`: Build with memory limits
