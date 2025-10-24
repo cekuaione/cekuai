@@ -71,13 +71,32 @@ async function submitWorkoutPlan(formData: Record<string, unknown>) {
   const data = formData as WorkoutModalFormData;
 
   const payload = {
+    // Basic fields
     goal: typeof data.goal === "string" ? data.goal : "muscle",
     level: typeof data.level === "string" ? data.level : "beginner",
     daysPerWeek: normalizeDaysPerWeek(data.daysPerWeek),
     durationPerDay: normalizeDuration(data.durationPerDay),
     equipment: Array.isArray(data.equipment) ? data.equipment.map((item) => String(item)) : [],
+    
+    // Enhanced fields
+    ageRange: typeof data.ageRange === "string" ? data.ageRange : "26-35",
+    injuries: Array.isArray(data.injuries) ? data.injuries.map((item) => String(item)) : [],
+    trainingTime: typeof data.trainingTime === "string" ? data.trainingTime : "flexible",
+    compoundMovements: Array.isArray(data.compoundMovements) ? data.compoundMovements.map((item) => String(item)) : [],
+    targetWeeks: typeof data.targetWeeks === "number" ? data.targetWeeks : 6,
+    
+    // Goal-specific details
+    ...(data.muscleDetails ? { muscleGoalDetails: data.muscleDetails } : {}),
+    ...(data.weightLossDetails ? { weightLossDetails: data.weightLossDetails } : {}),
+    ...(data.enduranceDetails ? { enduranceDetails: data.enduranceDetails } : {}),
+    ...(data.generalFitnessDetails ? { generalFitnessDetails: data.generalFitnessDetails } : {}),
+    
+    // Optional fields
     ...(data.notes && typeof data.notes === "string" && data.notes.trim().length
       ? { notes: data.notes.trim() }
+      : {}),
+    ...(data.injuryDetails && typeof data.injuryDetails === "string" && data.injuryDetails.trim().length
+      ? { injuryDetails: data.injuryDetails.trim() }
       : {}),
   };
 
