@@ -89,6 +89,20 @@ jobs:
           docker compose logs --tail 100
         ENDSSH
     
+    - name: Cleanup old Docker images
+      run: |
+        ssh -i ~/.ssh/oci_key ubuntu@${{ secrets.OCI_HOST }} '
+          echo "🧹 Cleaning up old Docker images..."
+          docker images --format "{{.Repository}}:{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}" | 
+          grep cekuai | 
+          sort -k3 -r | 
+          tail -n +4 | 
+          awk "{print \$2}" | 
+          xargs -r docker rmi -f || true
+          echo "✅ Docker image cleanup completed"
+        '
+      continue-on-error: true
+    
     - name: Display info
       run: |
         echo "✅ Production deployed!"

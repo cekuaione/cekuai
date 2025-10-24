@@ -2,9 +2,6 @@ import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Standalone output required for Docker runtime (provides .next/standalone)
-  output: "standalone",
-  
   // Allow external images from ExerciseDB
   images: {
     remotePatterns: [

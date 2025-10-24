@@ -5,8 +5,11 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "build:optimized": "NODE_OPTIONS='--max-old-space-size=1536' next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "clean": "rm -rf .next out build dist node_modules/.cache .npm",
+    "optimize": "./scripts/optimize-build.sh"
   },
   "dependencies": {
     "@auth/supabase-adapter": "^1.11.0",
