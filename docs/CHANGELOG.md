@@ -10,6 +10,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Exercises API Endpoint - n8n AI Agent Integration**
+  - Created `GET /api/exercises` endpoint for n8n AI Agent to query exercises
+  - Added exercises table to database types with full schema definition
+  - Implemented comprehensive filtering by equipment, bodyPart, targetMuscle, and search
+  - Added proper error handling and validation with Zod schema
+  - Included caching headers (1 hour) for performance optimization
+  - Response format includes exercise_id, name, gif_url, target_muscles, body_parts, equipments, secondary_muscles, and instructions
+  - Supports array contains filtering (@>) for equipment, body parts, and target muscles
+  - Text search functionality with case-insensitive name matching
+  - Configurable limit parameter (default 20, max 100)
+  - Returns count and total for pagination support
+
+- **Workout Plan Form - Comprehensive 5-Step Questionnaire**
+  - Updated workout plan form from 3-step to 5-step comprehensive questionnaire
+  - Added dynamic branching based on user's goal selection (muscle, weight_loss, endurance, general_fitness)
+  - Implemented goal-specific questions with detailed options for each target
+  - Added age range selection and training time preferences
+  - Enhanced experience level descriptions with detailed explanations
+  - Added injury tracking and conditional compound movement selection
+  - Implemented preview section with edit functionality in final step
+  - Created comprehensive form validation with Zod schemas
+  - Added conditional field rendering based on user selections
+  - Enhanced AI assistant tips for each step with context-aware guidance
+  - Improved form navigation with proper state management
+  - Added support for target weeks selection (4, 6, 8 weeks)
+  - Implemented professional PT-style questionnaire structure
 - **GitHub Secrets Integration - Enhanced deployment workflows**
   - Updated `.github/workflows/deploy.yml` with complete OCI secrets injection
   - Updated `.github/workflows/deploy-test.yml` with complete OCI secrets injection

@@ -53,6 +53,8 @@ export type Database = {
           status: string | null
           updated_at: string | null
           user_id: string
+          cycle_id: string | null
+          week_number: number | null
         }
         Insert: {
           created_at?: string | null
@@ -68,6 +70,8 @@ export type Database = {
           status?: string | null
           updated_at?: string | null
           user_id: string
+          cycle_id?: string | null
+          week_number?: number | null
         }
         Update: {
           created_at?: string | null
@@ -83,6 +87,8 @@ export type Database = {
           status?: string | null
           updated_at?: string | null
           user_id?: string
+          cycle_id?: string | null
+          week_number?: number | null
         }
         Relationships: []
       }
@@ -173,6 +179,141 @@ export type Database = {
           status?: string
           updated_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      exercises: {
+        Row: {
+          exercise_id: string
+          name: string
+          gif_url: string
+          target_muscles: string[]
+          body_parts: string[]
+          equipments: string[]
+          secondary_muscles: string[]
+          instructions: string[]
+        }
+        Insert: {
+          exercise_id: string
+          name: string
+          gif_url: string
+          target_muscles: string[]
+          body_parts: string[]
+          equipments: string[]
+          secondary_muscles: string[]
+          instructions: string[]
+        }
+        Update: {
+          exercise_id?: string
+          name?: string
+          gif_url?: string
+          target_muscles?: string[]
+          body_parts?: string[]
+          equipments?: string[]
+          secondary_muscles?: string[]
+          instructions?: string[]
+        }
+        Relationships: []
+      }
+      training_cycles: {
+        Row: {
+          id: string
+          user_id: string
+          cycle_number: number
+          status: string
+          start_date: string
+          target_weeks: number
+          preferences_snapshot: Json
+          total_plans: number
+          completed_plans: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          cycle_number: number
+          status: string
+          start_date: string
+          target_weeks: number
+          preferences_snapshot: Json
+          total_plans?: number
+          completed_plans?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          cycle_number?: number
+          status?: string
+          start_date?: string
+          target_weeks?: number
+          preferences_snapshot?: Json
+          total_plans?: number
+          completed_plans?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_training_preferences: {
+        Row: {
+          user_id: string
+          age_range: string
+          goal: string
+          level: string
+          injuries: string[]
+          equipment: string[]
+          days_per_week: number
+          duration_per_day: number
+          training_time: string
+          compound_movements: string[]
+          notes: string | null
+          muscle_goal_details: Json | null
+          weight_loss_details: Json | null
+          endurance_details: Json | null
+          general_fitness_details: Json | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          user_id: string
+          age_range: string
+          goal: string
+          level: string
+          injuries: string[]
+          equipment: string[]
+          days_per_week: number
+          duration_per_day: number
+          training_time: string
+          compound_movements: string[]
+          notes?: string | null
+          muscle_goal_details?: Json | null
+          weight_loss_details?: Json | null
+          endurance_details?: Json | null
+          general_fitness_details?: Json | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          user_id?: string
+          age_range?: string
+          goal?: string
+          level?: string
+          injuries?: string[]
+          equipment?: string[]
+          days_per_week?: number
+          duration_per_day?: number
+          training_time?: string
+          compound_movements?: string[]
+          notes?: string | null
+          muscle_goal_details?: Json | null
+          weight_loss_details?: Json | null
+          endurance_details?: Json | null
+          general_fitness_details?: Json | null
+          created_at?: string
+          updated_at?: string
         }
         Relationships: []
       }

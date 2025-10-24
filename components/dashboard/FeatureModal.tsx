@@ -7,12 +7,156 @@ import type { FeatureModalConfig, FormField } from "@/lib/types/modal";
 import { cn } from "@/lib/utils";
 import { AIAssistant } from "@/components/dashboard/AIAssistant";
 import { useFeatureModal } from "@/hooks/useFeatureModal";
+import { PreviewSection } from "@/components/dashboard/workout/PreviewSection";
 
 interface FeatureModalProps {
   config: FeatureModalConfig;
   initialData?: Record<string, unknown>;
   isOpen: boolean;
   onClose: () => void;
+}
+
+// Helper function to get dynamic fields based on goal
+function getDynamicFields(goal: string): FormField[] {
+  switch (goal) {
+    case "muscle":
+      return [
+        {
+          id: "targetAreas",
+          type: "cards",
+          label: "Hangi vücut bölgelerine odaklanmak istiyorsun?",
+          multiple: true,
+          required: true,
+          options: [
+            { value: "full_body", label: "Tüm Vücut", icon: "🏋️‍♂️" },
+            { value: "chest", label: "Göğüs", icon: "💪" },
+            { value: "back", label: "Sırt", icon: "🦴" },
+            { value: "legs", label: "Bacaklar", icon: "🦵" },
+            { value: "shoulders", label: "Omuzlar", icon: "💪" },
+            { value: "arms", label: "Kollar", icon: "🦾" },
+            { value: "core", label: "Core", icon: "🔥" },
+          ],
+        },
+        {
+          id: "priority",
+          type: "radio",
+          label: "Önceliğin nedir?",
+          required: true,
+          options: [
+            { value: "aesthetic", label: "Estetik", icon: "✨" },
+            { value: "strength", label: "Kuvvet", icon: "💪" },
+            { value: "balanced", label: "Dengeli", icon: "⚖️" },
+          ],
+        },
+        {
+          id: "phase",
+          type: "radio",
+          label: "Hangi aşamadasın?",
+          required: true,
+          options: [
+            { value: "bulk", label: "Kas+Kilo Al", icon: "📈" },
+            { value: "cut", label: "Yağ Yak", icon: "🔥" },
+            { value: "recomp", label: "Denge", icon: "⚖️" },
+          ],
+        },
+      ];
+    case "weight_loss":
+      return [
+        {
+          id: "cardioPreference",
+          type: "cards",
+          label: "Cardio hakkında ne düşünüyorsun?",
+          required: true,
+          options: [
+            { value: "love", label: "Severim", icon: "❤️" },
+            { value: "tolerate", label: "Tolere ederim", icon: "😐" },
+            { value: "dislike", label: "Sevmem", icon: "😤" },
+          ],
+        },
+        {
+          id: "activityLevel",
+          type: "cards",
+          label: "Günlük aktivite seviyen nedir?",
+          required: true,
+          options: [
+            { value: "sedentary", label: "Hareketsiz", icon: "🛋️" },
+            { value: "light", label: "Hafif Aktif", icon: "🚶" },
+            { value: "active", label: "Aktif", icon: "🏃" },
+          ],
+        },
+        {
+          id: "musclePriority",
+          type: "radio",
+          label: "Kas konusunda önceliğin nedir?",
+          required: true,
+          options: [
+            { value: "fast_loss", label: "Hızlı kilo ver", icon: "⚡" },
+            { value: "preserve", label: "Kas koru", icon: "🛡️" },
+            { value: "build", label: "Kas geliştir", icon: "💪" },
+          ],
+        },
+      ];
+    case "endurance":
+      return [
+        {
+          id: "sportType",
+          type: "cards",
+          label: "Hangi spor dalına odaklanmak istiyorsun?",
+          required: true,
+          options: [
+            { value: "running", label: "Koşu", icon: "🏃" },
+            { value: "cycling", label: "Bisiklet", icon: "🚴" },
+            { value: "swimming", label: "Yüzme", icon: "🏊" },
+            { value: "general", label: "Genel", icon: "🏃‍♂️" },
+          ],
+        },
+        {
+          id: "currentLevel",
+          type: "cards",
+          label: "Şu anki dayanıklılık seviyen nedir?",
+          required: true,
+          options: [
+            { value: "baseline", label: "Başlangıç", icon: "🌱", description: "20dk koşamam" },
+            { value: "moderate", label: "Orta", icon: "🌿", description: "30-45dk koşarım" },
+            { value: "advanced", label: "İleri", icon: "🌳", description: "1 saat+ koşarım" },
+          ],
+        },
+        {
+          id: "specificGoal",
+          type: "textarea",
+          label: "Spesifik hedefin var mı? (opsiyonel)",
+          placeholder: "Örn: 5K'yı 30 dakikada koşmak",
+        },
+      ];
+    case "general_fitness":
+      return [
+        {
+          id: "mainFocus",
+          type: "cards",
+          label: "Ana odak noktan nedir?",
+          required: true,
+          options: [
+            { value: "strength", label: "Kuvvet", icon: "💪" },
+            { value: "cardio", label: "Kardiyovasküler", icon: "❤️" },
+            { value: "flexibility", label: "Esneklik", icon: "🧘" },
+            { value: "balanced", label: "Dengeli", icon: "⚖️" },
+          ],
+        },
+        {
+          id: "lifestyle",
+          type: "cards",
+          label: "Yaşam tarzın nasıl?",
+          required: true,
+          options: [
+            { value: "desk", label: "Masa Başı", icon: "💻" },
+            { value: "physical", label: "Fiziksel İş", icon: "🔨" },
+            { value: "mixed", label: "Karışık", icon: "🔄" },
+          ],
+        },
+      ];
+    default:
+      return [];
+  }
 }
 
 export function FeatureModal({ config, initialData, isOpen, onClose }: FeatureModalProps) {
@@ -238,6 +382,77 @@ function FormPanel({ config, modal, isLastStep, isMobileAITab, setMobileAITab }:
                   onBlur={handleBlur}
                 />
               ))}
+              
+              {activeStep?.id === "goal-specific" && modal.formData.goal ? (
+                getDynamicFields(modal.formData.goal as string).map((field) => (
+                  <FieldRenderer
+                    key={field.id}
+                    field={field}
+                    value={modal.formData[field.id]}
+                    error={modal.validationErrors[field.id]}
+                    onChange={(value) => modal.updateFormData(field.id, value)}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                  />
+                ))
+              ) : null}
+              
+              {activeStep?.id === "experience-safety" && modal.formData.injuries && 
+               Array.isArray(modal.formData.injuries) && 
+               modal.formData.injuries.length > 0 && 
+               modal.formData.injuries.includes("other") ? (
+                <FieldRenderer
+                  key="injuryDetails"
+                  field={{
+                    id: "injuryDetails",
+                    type: "textarea",
+                    label: "Yaralanma detayları",
+                    placeholder: "Yaralanmalar hakkında detay (opsiyonel)",
+                  }}
+                  value={modal.formData.injuryDetails}
+                  error={modal.validationErrors.injuryDetails}
+                  onChange={(value) => modal.updateFormData("injuryDetails", value)}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                />
+              ) : null}
+              
+              {activeStep?.id === "experience-safety" && modal.formData.level && modal.formData.level !== "beginner" ? (
+                <FieldRenderer
+                  key="compoundMovements"
+                  field={{
+                    id: "compoundMovements",
+                    type: "cards",
+                    label: "Hangi compound movements'ı rahatça yapıyorsun?",
+                    multiple: true,
+                    required: true,
+                    options: [
+                      { value: "squat", label: "Squat", icon: "🦵" },
+                      { value: "deadlift", label: "Deadlift", icon: "🏋️" },
+                      { value: "bench_press", label: "Bench Press", icon: "💪" },
+                      { value: "overhead_press", label: "Overhead Press", icon: "🦾" },
+                      { value: "pull_ups", label: "Pull-ups", icon: "🪜" },
+                    ],
+                  }}
+                  value={modal.formData.compoundMovements}
+                  error={modal.validationErrors.compoundMovements}
+                  onChange={(value) => modal.updateFormData("compoundMovements", value)}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                />
+              ) : null}
+              
+              {activeStep?.id === "cycle-preview" && (
+                <PreviewSection
+                  formData={modal.formData}
+                  onEdit={(step, field) => {
+                    modal.setCurrentStep(step - 1);
+                    if (field) {
+                      modal.setCurrentField(field);
+                    }
+                  }}
+                />
+              )}
             </div>
 
             <div className="border-t border-border bg-background/80 px-6 py-4">

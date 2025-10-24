@@ -10,8 +10,9 @@ This document covers all API integrations in the CEKUAI project, including Supab
 1. [Supabase Integration](#supabase-integration)
 2. [n8n Workflow Integration](#n8n-workflow-integration)
 3. [Internal API Routes](#internal-api-routes)
-4. [Error Handling](#error-handling)
-5. [Testing](#testing)
+4. [Exercises API](#exercises-api)
+5. [Error Handling](#error-handling)
+6. [Testing](#testing)
 
 ---
 
@@ -597,6 +598,154 @@ Sentry.init({
 - [N8N_WORKOUT_API_CONTRACT.md](./N8N_WORKOUT_API_CONTRACT.md) - n8n workflow specification
 - [SPORT_FEATURE.md](./SPORT_FEATURE.md) - Feature documentation
 - [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) - Debug guide
+
+---
+
+## Exercises API
+
+### Overview
+
+The Exercises API provides a comprehensive endpoint for querying exercise data from the Supabase database. This endpoint is specifically designed for the n8n AI Agent to access exercise information when generating workout plans.
+
+### Endpoint
+
+```
+GET /api/exercises
+```
+
+### Query Parameters
+
+| Parameter | Type | Required | Description | Example |
+|-----------|------|----------|-------------|---------|
+| `equipment` | string | No | Filter by equipment type | `barbell`, `dumbbell`, `band`, `body weight` |
+| `bodyPart` | string | No | Filter by body part | `chest`, `legs`, `back`, `shoulders` |
+| `targetMuscle` | string | No | Filter by target muscle | `pectorals`, `quadriceps`, `biceps` |
+| `search` | string | No | Text search in exercise name | `press`, `squat`, `curl` |
+| `limit` | number | No | Number of results (default: 20, max: 100) | `10`, `50`, `100` |
+
+### Response Format
+
+```json
+{
+  "data": [
+    {
+      "exercise_id": "trmte8s",
+      "name": "band shrug",
+      "gif_url": "https://www.ceku.ai/trmte8s.gif",
+      "target_muscles": ["traps"],
+      "body_parts": ["neck"],
+      "equipments": ["band"],
+      "secondary_muscles": ["shoulders"],
+      "instructions": [
+        "Step:1 Stand with your feet shoulder-width apart...",
+        "Step:2 Keep your arms straight and relaxed..."
+      ]
+    }
+  ],
+  "count": 1,
+  "total": 1500
+}
+```
+
+### Example Queries
+
+#### Filter by Equipment and Body Part
+```bash
+curl -X GET "http://localhost:3000/api/exercises?equipment=barbell&bodyPart=chest&limit=20"
+```
+
+#### Search with Equipment Filter
+```bash
+curl -X GET "http://localhost:3000/api/exercises?search=press&equipment=barbell"
+```
+
+#### Filter by Target Muscle
+```bash
+curl -X GET "http://localhost:3000/api/exercises?targetMuscle=pectorals&limit=10"
+```
+
+### Database Schema
+
+The exercises table structure:
+
+```sql
+CREATE TABLE exercises (
+  exercise_id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  gif_url TEXT NOT NULL,
+  target_muscles TEXT[] NOT NULL,
+  body_parts TEXT[] NOT NULL,
+  equipments TEXT[] NOT NULL,
+  secondary_muscles TEXT[] NOT NULL,
+  instructions TEXT[] NOT NULL
+);
+```
+
+### Filtering Logic
+
+- **Equipment Filter**: Uses PostgreSQL array contains operator (`@>`) to match equipment arrays
+- **Body Part Filter**: Uses array contains operator to match body_parts arrays
+- **Target Muscle Filter**: Uses array contains operator to match target_muscles arrays
+- **Text Search**: Uses case-insensitive pattern matching (`ILIKE`) on the name column
+- **Combined Filters**: All filters are combined with AND logic
+
+### Performance Features
+
+- **Caching**: 1-hour cache headers for improved performance
+- **Indexing**: Database indexes on array columns for fast filtering
+- **Pagination**: Configurable limit with total count for pagination support
+- **Ordering**: Results ordered by name (ascending) for consistent output
+
+### Error Handling
+
+#### Invalid Parameters (400)
+```json
+{
+  "error": "Invalid parameters",
+  "details": [
+    {
+      "field": "limit",
+      "message": "Too big: expected number to be <=100"
+    }
+  ]
+}
+```
+
+#### Database Error (500)
+```json
+{
+  "error": "Database error"
+}
+```
+
+### Usage in n8n AI Agent
+
+The n8n AI Agent can use this endpoint as a tool to:
+
+1. **Filter exercises by available equipment** - Query exercises that match user's available equipment
+2. **Target specific muscle groups** - Get exercises for specific body parts or target muscles
+3. **Search for specific exercise types** - Find exercises by name patterns
+4. **Get exercise details** - Retrieve complete exercise information including instructions and GIF URLs
+
+### Integration Example
+
+```typescript
+// n8n workflow step
+const response = await fetch('https://cekuai.duckdns.org/api/exercises', {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  params: {
+    equipment: 'dumbbell',
+    bodyPart: 'chest',
+    limit: 20
+  }
+});
+
+const exercises = await response.json();
+// Use exercises.data for workout plan generation
+```
 
 ---
 

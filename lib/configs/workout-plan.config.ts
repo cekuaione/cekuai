@@ -1,12 +1,25 @@
 import type { FeatureModalConfig } from "@/lib/types/modal";
 
 type WorkoutModalFormData = {
+  ageRange?: string;
   goal?: string;
   level?: string;
   daysPerWeek?: number;
   durationPerDay?: number;
   equipment?: unknown;
   notes?: string;
+  // Goal-specific fields
+  muscleDetails?: unknown;
+  weightLossDetails?: unknown;
+  enduranceDetails?: unknown;
+  generalFitnessDetails?: unknown;
+  // Experience & safety fields
+  injuries?: unknown;
+  injuryDetails?: string;
+  compoundMovements?: unknown;
+  // Logistics fields
+  trainingTime?: string;
+  targetWeeks?: number;
 };
 
 type WorkoutSubmitResult = {
@@ -104,11 +117,25 @@ export const workoutPlanConfig: FeatureModalConfig = {
   description: "Hedeflerine göre kişisel antrenman planı oluştur.",
   creditCost: 2,
   formSteps: [
+    // STEP 1 - Basic Info
     {
-      id: "goal",
-      title: "Hedefini seç",
-      description: "Planın odaklandığı hedefi belirle.",
+      id: "basic-info",
+      title: "Temel Bilgiler",
+      description: "Yaş aralığın ve antrenman hedefin nedir?",
       fields: [
+        {
+          id: "ageRange",
+          type: "cards",
+          label: "Yaş aralığın nedir?",
+          required: true,
+          options: [
+            { value: "18-25", label: "18-25", icon: "🌱" },
+            { value: "26-35", label: "26-35", icon: "🌿" },
+            { value: "36-45", label: "36-45", icon: "🌳" },
+            { value: "46-55", label: "46-55", icon: "🏔️" },
+            { value: "56+", label: "56+", icon: "🎖️" },
+          ],
+        },
         {
           id: "goal",
           type: "cards",
@@ -123,21 +150,72 @@ export const workoutPlanConfig: FeatureModalConfig = {
         },
       ],
     },
+    // STEP 2 - Goal-specific questions (Dynamic)
     {
-      id: "experience",
-      title: "Seviyeni ve zamanı seç",
+      id: "goal-specific",
+      title: "Hedef-Özel Sorular",
+      description: "Hedefine göre daha detaylı bilgi alalım",
+      fields: [
+        // This will be populated dynamically based on goal selection
+      ],
+    },
+    // STEP 3 - Experience & Safety
+    {
+      id: "experience-safety",
+      title: "Deneyim & Güvenlik",
+      description: "Antrenman deneyimin ve sağlık durumun hakkında bilgi alalım",
       fields: [
         {
           id: "level",
-          type: "radio",
-          label: "Antrenman seviyen",
+          type: "cards",
+          label: "Antrenman seviyen nedir?",
           required: true,
           options: [
-            { value: "beginner", label: "Başlangıç", icon: "🌱" },
-            { value: "intermediate", label: "Orta", icon: "🌿" },
-            { value: "advanced", label: "İleri", icon: "🌳" },
+            { 
+              value: "beginner", 
+              label: "Başlangıç", 
+              icon: "🌱",
+              description: "Squat, deadlift, bench press hiç yapmadım"
+            },
+            { 
+              value: "intermediate", 
+              label: "Orta Seviye", 
+              icon: "🌿",
+              description: "Temel egzersizleri biliyorum, form geliştirmeli"
+            },
+            { 
+              value: "advanced", 
+              label: "İleri Seviye", 
+              icon: "🌳",
+              description: "Compound movements'ı güvenle yapıyorum"
+            },
           ],
         },
+        {
+          id: "injuries",
+          type: "cards",
+          label: "Mevcut yaralanmaların var mı?",
+          multiple: true,
+          options: [
+            { value: "none", label: "Hiçbiri", icon: "✅" },
+            { value: "knee", label: "Diz", icon: "🦵" },
+            { value: "lower_back", label: "Alt Sırt", icon: "🫀" },
+            { value: "shoulder", label: "Omuz", icon: "💪" },
+            { value: "elbow", label: "Dirsek", icon: "🦾" },
+            { value: "wrist", label: "Bilek", icon: "✋" },
+            { value: "neck", label: "Boyun", icon: "🧠" },
+            { value: "ankle", label: "Ayak Bileği", icon: "🦶" },
+            { value: "other", label: "Diğer", icon: "⚠️" },
+          ],
+        },
+      ],
+    },
+    // STEP 4 - Logistics & Equipment
+    {
+      id: "logistics-equipment",
+      title: "Lojistik & Ekipman",
+      description: "Antrenman zamanın ve kullanabileceğin ekipmanlar",
+      fields: [
         {
           id: "daysPerWeek",
           type: "slider",
@@ -158,12 +236,18 @@ export const workoutPlanConfig: FeatureModalConfig = {
           defaultValue: 45,
           required: true,
         },
-      ],
-    },
-    {
-      id: "equipment",
-      title: "Ekipman ve notlar",
-      fields: [
+        {
+          id: "trainingTime",
+          type: "cards",
+          label: "Tercih ettiğin antrenman zamanı nedir?",
+          required: true,
+          options: [
+            { value: "morning", label: "Sabah", icon: "🌅", description: "06-10 arası" },
+            { value: "midday", label: "Öğle", icon: "☀️", description: "11-15 arası" },
+            { value: "evening", label: "Akşam", icon: "🌆", description: "16-21 arası" },
+            { value: "flexible", label: "Esnek", icon: "🕐", description: "Zamanıma göre" },
+          ],
+        },
         {
           id: "equipment",
           type: "cards",
@@ -172,9 +256,44 @@ export const workoutPlanConfig: FeatureModalConfig = {
           options: [
             { value: "bodyweight", label: "Vücut ağırlığı", icon: "🧘" },
             { value: "dumbbell", label: "Dumbbell", icon: "🏋️" },
+            { value: "barbell", label: "Barbell", icon: "🏋️‍♂️" },
             { value: "kettlebell", label: "Kettlebell", icon: "🔔" },
             { value: "resistance_band", label: "Direnç bandı", icon: "🎯" },
             { value: "pullup_bar", label: "Barfiks", icon: "🪜" },
+          ],
+        },
+      ],
+    },
+    // STEP 5 - Cycle & Preview
+    {
+      id: "cycle-preview",
+      title: "Döngü & Önizleme",
+      description: "Son ayarlar ve seçimlerinin özeti",
+      fields: [
+        {
+          id: "targetWeeks",
+          type: "cards",
+          label: "Kaç haftalık döngü istersin?",
+          required: true,
+          options: [
+            { 
+              value: "4", 
+              label: "4 Hafta", 
+              icon: "📅",
+              description: "Hızlı başlangıç"
+            },
+            { 
+              value: "6", 
+              label: "6 Hafta", 
+              icon: "📆",
+              description: "Dengeli gelişim"
+            },
+            { 
+              value: "8", 
+              label: "8 Hafta", 
+              icon: "🗓️",
+              description: "Derinlemesine program"
+            },
           ],
         },
         {
@@ -188,28 +307,68 @@ export const workoutPlanConfig: FeatureModalConfig = {
   ],
   aiTips: [
     {
+      id: "basic-info-tip",
+      trigger: "field_focus",
+      fieldId: "ageRange",
+      condition: (_, context) => context.currentField === "ageRange",
+      content: "💡 Yaş ve hedef, antrenman programını belirleyen en önemli faktörler",
+      type: "tip",
+    },
+    {
       id: "goal-tip",
       trigger: "field_focus",
       fieldId: "goal",
       condition: (_, context) => context.currentField === "goal",
-      content: "💡 Hedefini doğru seçmek, planın içeriğini doğrudan etkiler.",
+      content: "🎯 Hedefini doğru seçmek, planın içeriğini doğrudan etkiler",
       type: "tip",
+    },
+    {
+      id: "level-tip",
+      trigger: "field_focus",
+      fieldId: "level",
+      condition: (_, context) => context.currentField === "level",
+      content: "💪 Seviye belirleme, güvenli ve etkili antrenman için kritik",
+      type: "tip",
+    },
+    {
+      id: "injuries-tip",
+      trigger: "field_focus",
+      fieldId: "injuries",
+      condition: (_, context) => context.currentField === "injuries",
+      content: "🛡️ Yaralanma bilgisi, güvenli egzersiz seçimi için kritik",
+      type: "tip",
+    },
+    {
+      id: "training-time-tip",
+      trigger: "field_focus",
+      fieldId: "trainingTime",
+      condition: (_, context) => context.currentField === "trainingTime",
+      content: "⏰ Antrenman zamanı, warm-up süresini etkiler",
+      type: "tip",
+    },
+    {
+      id: "equipment-tip",
+      trigger: "field_focus",
+      fieldId: "equipment",
+      condition: (_, context) => context.currentField === "equipment",
+      content: "🏋️ Ekipman seçimini çeşitlendirmek daha zengin antrenman önerileri sağlar",
+      type: "info",
     },
     {
       id: "days-warning",
       trigger: "field_value",
       fieldId: "daysPerWeek",
       condition: (data) => (data.daysPerWeek as number | undefined) !== undefined && (data.daysPerWeek as number) > 5,
-      content: "⚠️ Haftada 5 günden fazla antrenman planlıyorsan dinlenme günlerini iyi planla.",
+      content: "⚠️ Haftada 5 günden fazla antrenman planlıyorsan dinlenme günlerini iyi planla",
       type: "warning",
     },
     {
-      id: "equipment-info",
+      id: "cycle-tip",
       trigger: "field_focus",
-      fieldId: "equipment",
-      condition: (_, context) => context.currentField === "equipment",
-      content: "ℹ️ Ekipman seçimini çeşitlendirmek daha zengin antrenman önerileri sağlar.",
-      type: "info",
+      fieldId: "targetWeeks",
+      condition: (_, context) => context.currentField === "targetWeeks",
+      content: "🔄 Döngü tamamlandığında seviye atlaması önerebiliriz!",
+      type: "tip",
     },
   ],
   onSubmit: async (formData) => {

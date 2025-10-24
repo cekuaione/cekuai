@@ -1,4 +1,4 @@
-import type { WorkoutPlanRequest, WorkoutPlanResponse } from "@/lib/workout/types";
+import type { WorkoutPlanRequest, WorkoutPlanResponse, EnhancedWorkoutPlanRequest } from "@/lib/workout/types";
 
 export type N8nError = {
   message: string;
@@ -25,11 +25,21 @@ function resolveWebhookUrl(): ResolvedWebhookUrl {
 }
 
 /**
- * Generate workout plan via n8n webhook.
+ * Generate workout plan via n8n webhook with enhanced payload.
  * @throws N8nError when the webhook call fails or returns an error response.
  */
 export async function generateWorkoutPlan(
   payload: WorkoutPlanRequest,
+): Promise<WorkoutPlanResponse> {
+  return generateWorkoutPlanWithContext(payload);
+}
+
+/**
+ * Generate workout plan via n8n webhook with cycle context and enhanced payload.
+ * @throws N8nError when the webhook call fails or returns an error response.
+ */
+export async function generateWorkoutPlanWithContext(
+  payload: WorkoutPlanRequest | EnhancedWorkoutPlanRequest,
 ): Promise<WorkoutPlanResponse> {
   const { url: webhookUrl, fromEnv } = resolveWebhookUrl();
 
@@ -49,6 +59,10 @@ export async function generateWorkoutPlan(
         planId: payload.planId,
         goal: payload.goal,
         level: payload.level,
+        cycleId: 'cycleId' in payload ? payload.cycleId : undefined,
+        weekNumber: 'weekNumber' in payload ? payload.weekNumber : undefined,
+        targetWeeks: 'targetWeeks' in payload ? payload.targetWeeks : undefined,
+        isEnhanced: 'cycleId' in payload,
       },
     });
 

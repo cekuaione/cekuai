@@ -131,6 +131,14 @@ export function useFeatureModal<Result = unknown>(
     setCurrentField(undefined);
   }, []);
 
+  const setCurrentStep = useCallback((step: number) => {
+    setState((prev) => ({
+      ...prev,
+      currentStep: Math.max(0, Math.min(step, config.formSteps.length - 1)),
+    }));
+    setCurrentField(undefined);
+  }, [config.formSteps.length]);
+
   const submit = useCallback(async () => {
     // Validate all steps
     for (let index = 0; index < config.formSteps.length; index += 1) {
@@ -202,6 +210,7 @@ export function useFeatureModal<Result = unknown>(
     currentStep: state.currentStep,
     nextStep,
     prevStep,
+    setCurrentStep,
     formData: state.formData,
     updateFormData,
     validationErrors: state.validationErrors,
