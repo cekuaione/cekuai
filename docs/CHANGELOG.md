@@ -18,6 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Included caching headers (1 hour) for performance optimization
   - Response format includes exercise_id, name, gif_url, target_muscles, body_parts, equipments, secondary_muscles, and instructions
   - Supports array contains filtering (@>) for equipment, body parts, and target muscles
+- **Exercise Enrichment API Endpoint**
+  - Created `POST /api/exercises/enrich` endpoint for bulk exercise data retrieval
+  - Accepts array of exercise names and returns gif_url and instructions
+  - Uses efficient single DB query with case-insensitive ILIKE matching
+  - Returns data as object map keyed by exercise name for easy lookup
+  - Handles missing exercises gracefully (excludes from response)
+  - Includes 1-hour caching headers for performance
   - Text search functionality with case-insensitive name matching
   - Configurable limit parameter (default 20, max 100)
   - Returns count and total for pagination support

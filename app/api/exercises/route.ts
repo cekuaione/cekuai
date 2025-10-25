@@ -9,6 +9,7 @@ const querySchema = z.object({
   targetMuscle: z.string().optional(),
   search: z.string().optional(),
   limit: z.coerce.number().min(1).max(100).default(20),
+  fields: z.string().optional(),
 });
 
 // Response type for exercise data
@@ -49,7 +50,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { equipment, bodyPart, targetMuscle, search, limit } = parseResult.data;
+    const { equipment, bodyPart, targetMuscle, search, limit, fields } = parseResult.data;
     
     // Convert equipment to lowercase for case-insensitive matching
     const normalizedEquipment = equipment?.toLowerCase();
@@ -60,14 +61,18 @@ export async function GET(request: NextRequest) {
       targetMuscle,
       search,
       limit,
+      fields,
     });
 
     const supabase = getSupabaseServiceClient();
     
+    // Determine select fields
+    const selectFields = fields ? fields.split(',').map(f => f.trim()) : "*";
+    
     // Build the query
     let query = supabase
       .from("exercises")
-      .select("*", { count: "exact" });
+      .select(selectFields, { count: "exact" });
 
     // Apply filters
     if (normalizedEquipment) {
@@ -103,10 +108,16 @@ export async function GET(request: NextRequest) {
     }
 
     // Transform gif_url to use ceku.ai domain as specified in requirements
-    const transformedData = data?.map(exercise => ({
-      ...exercise,
-      gif_url: `https://www.ceku.ai/${exercise.exercise_id}.gif`
-    })) || [];
+    // Only transform if gif_url is being selected
+    const transformedData = data?.map(exercise => {
+      if (fields && !fields.includes('gif_url')) {
+        return exercise;
+      }
+      return {
+        ...exercise,
+        gif_url: `https://www.ceku.ai/${exercise.exercise_id}.gif`
+      };
+    }) || [];
 
     const response: ExercisesApiResponse = {
       data: transformedData,

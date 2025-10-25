@@ -78,7 +78,18 @@ async function getWorkoutPlan(planId: string, userId: string): Promise<WorkoutPl
     durationPerDay: data.duration_per_day,
     equipment: (data.equipment as string[]) || [],
     notes: data.notes || "",
-    planData: data.plan_data as WorkoutPlan["planData"],
+    planData: (() => {
+      try {
+        if (!data.plan_data) return null;
+        if (typeof data.plan_data === "string") {
+          return JSON.parse(data.plan_data) as WorkoutPlan["planData"];
+        }
+        return data.plan_data as WorkoutPlan["planData"];
+      } catch (error) {
+        console.warn(`Skipping corrupted plan_data for plan ${data.id}:`, error);
+        return null;
+      }
+    })(),
     status: data.status as WorkoutPlanStatus,
     createdAt: data.created_at || new Date().toISOString(),
     updatedAt: data.updated_at || data.created_at || new Date().toISOString(),
