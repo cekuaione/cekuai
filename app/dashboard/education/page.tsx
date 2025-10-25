@@ -22,7 +22,7 @@ export default function EducationDashboardPage() {
             <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
-            href="/new-dashboard"
+            href="/dashboard"
             className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground transition hover:border-education hover:text-education focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-education focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             Ana sayfa

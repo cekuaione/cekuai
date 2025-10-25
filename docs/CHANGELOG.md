@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+- **Legacy new-dashboard folder cleanup**
+  - Deleted `app/(new-dashboard)` folder as it was replaced by `/dashboard` route
+  - Updated remaining reference in education page to use `/dashboard` instead of `/new-dashboard`
+  - Dashboard system now consists of `/dashboard` (active) and `/dashboard-legacy` (backup reference)
+
 ### Added
 - **Exercises API Endpoint - n8n AI Agent Integration**
   - Created `GET /api/exercises` endpoint for n8n AI Agent to query exercises
