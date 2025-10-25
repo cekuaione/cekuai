@@ -309,7 +309,7 @@ function WorkoutResultContent() {
                             <div className="relative h-28 w-28 overflow-hidden rounded-2xl border border-border/60 bg-surface-muted">
                               {exercise.imageUrl ? (
                                 <button onClick={() => setSelectedImage(exercise.imageUrl ?? null)} className="h-full w-full">
-                                  <Image src={exercise.imageUrl} alt={exercise.name} fill className="object-cover" />
+                                  <Image src={exercise.imageUrl} alt={exercise.name} fill className="object-cover" unoptimized />
                                 </button>
                               ) : (
                                 <div className="flex h-full w-full items-center justify-center text-text-secondary">
@@ -332,7 +332,7 @@ function WorkoutResultContent() {
       {selectedImage && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-strong/90 p-4 backdrop-blur" onClick={() => setSelectedImage(null)}>
           <div className="relative h-full w-full max-w-3xl">
-            <Image src={selectedImage} alt="Egzersiz görseli" fill className="object-contain" />
+            <Image src={selectedImage} alt="Egzersiz görseli" fill className="object-contain" unoptimized />
             <button
               onClick={() => setSelectedImage(null)}
               className="absolute right-4 top-4 rounded-full bg-card px-3 py-1 text-sm text-text-primary shadow-sm"

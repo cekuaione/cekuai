@@ -304,6 +304,7 @@ export default async function WorkoutPlanResultPage({
                                 alt={exercise.name}
                                 fill
                                 className="object-cover"
+                                unoptimized
                               />
                             ) : (
                               <div className="flex h-full w-full items-center justify-center text-text-secondary">
