@@ -4,17 +4,18 @@ import { z } from "zod";
 
 // Request validation schema
 const enrichRequestSchema = z.object({
-  exerciseNames: z.array(z.string()).min(1).max(50),
+  exerciseIds: z.array(z.string()).min(1).max(50),
 });
 
 // Response type for enriched exercise data
 interface EnrichedExercise {
+  name: string;
   gif_url: string;
   instructions: string[];
 }
 
 interface EnrichResponse {
-  [exerciseName: string]: EnrichedExercise;
+  [exerciseId: string]: EnrichedExercise;
 }
 
 export async function POST(request: NextRequest) {
@@ -36,25 +37,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { exerciseNames } = parseResult.data;
+    const { exerciseIds } = parseResult.data;
     
     console.log("🔍 [API] Enriching exercises", {
-      count: exerciseNames.length,
-      exercises: exerciseNames,
+      count: exerciseIds.length,
+      exercises: exerciseIds,
     });
 
     const supabase = getSupabaseServiceClient();
     
-    // Query exercises with case-insensitive matching using ILIKE
+    // Query exercises by exercise_id
     const { data, error } = await supabase
       .from("exercises")
       .select("exercise_id, name, gif_url, instructions")
-      .or(exerciseNames.map(name => `name.ilike.%${name}%`).join(','));
+      .in('exercise_id', exerciseIds);
 
     if (error) {
       console.error("❌ [DB] Error querying exercises for enrichment", {
         error: error.message,
-        exerciseNames,
+        exerciseIds,
       });
       return NextResponse.json(
         { error: "Database error" },
@@ -62,29 +63,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Transform data into object map
+    // Transform data into object map keyed by exercise_id
     const enrichedData: EnrichResponse = {};
     
     if (data) {
       data.forEach(exercise => {
-        // Use case-insensitive matching to find the original exercise name
-        const originalName = exerciseNames.find(name => 
-          name.toLowerCase() === exercise.name.toLowerCase()
-        );
-        
-        if (originalName) {
-          enrichedData[originalName] = {
-            gif_url: `https://www.ceku.ai/${exercise.exercise_id}.gif`,
-            instructions: exercise.instructions,
-          };
-        }
+        enrichedData[exercise.exercise_id] = {
+          name: exercise.name,
+          gif_url: `https://www.ceku.ai/${exercise.exercise_id}.gif`,
+          instructions: exercise.instructions,
+        };
       });
     }
 
     console.log("✅ [API] Exercise enrichment successful", {
-      requested: exerciseNames.length,
+      requested: exerciseIds.length,
       found: Object.keys(enrichedData).length,
-      missing: exerciseNames.filter(name => !enrichedData[name]),
+      missing: exerciseIds.filter(id => !enrichedData[id]),
     });
 
     // Add caching headers for 1 hour
