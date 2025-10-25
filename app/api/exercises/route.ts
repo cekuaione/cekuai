@@ -12,20 +12,9 @@ const querySchema = z.object({
   fields: z.string().optional(),
 });
 
-// Response type for exercise data
-interface ExerciseResponse {
-  exercise_id: string;
-  name: string;
-  gif_url: string;
-  target_muscles: string[];
-  body_parts: string[];
-  equipments: string[];
-  secondary_muscles: string[];
-  instructions: string[];
-}
-
+// Response type for exercises API
 interface ExercisesApiResponse {
-  data: ExerciseResponse[];
+  data: Record<string, unknown>[];
   count: number;
   total: number;
 }
@@ -68,11 +57,14 @@ export async function GET(request: NextRequest) {
     
     // Determine select fields
     const selectFields = fields ? fields.split(',').map(f => f.trim()) : "*";
+    const selectString = Array.isArray(selectFields) 
+      ? selectFields.join(',') 
+      : selectFields;
     
     // Build the query
     let query = supabase
       .from("exercises")
-      .select(selectFields, { count: "exact" });
+      .select(selectString, { count: "exact" });
 
     // Apply filters
     if (normalizedEquipment) {
@@ -108,19 +100,20 @@ export async function GET(request: NextRequest) {
     }
 
     // Transform gif_url to use ceku.ai domain as specified in requirements
-    // Only transform if gif_url is being selected
+    // Only transform when selecting all fields (backward compatibility)
     const transformedData = data?.map(exercise => {
-      if (fields && !fields.includes('gif_url')) {
+      // If using selective fields, return as-is
+      if (fields && fields !== '*') {
         return exercise;
       }
-      return {
-        ...exercise,
-        gif_url: `https://www.ceku.ai/${exercise.exercise_id}.gif`
-      };
+      // When selecting all fields, transform the URL
+      return Object.assign({}, exercise, {
+        gif_url: `https://www.ceku.ai/${(exercise as unknown as { exercise_id: string }).exercise_id}.gif`
+      });
     }) || [];
 
     const response: ExercisesApiResponse = {
-      data: transformedData,
+      data: transformedData as unknown as Record<string, unknown>[],
       count: transformedData.length,
       total: count || 0,
     };
