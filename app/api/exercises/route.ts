@@ -2,6 +2,27 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServiceClient } from "@/lib/supabase/server";
 import { z } from "zod";
 
+// Equipment name mapping for normalization
+const EQUIPMENT_MAPPING: Record<string, string> = {
+  'bodyweight': 'body weight',
+  'resistanceband': 'resistance band',
+  'medicineball': 'medicine ball',
+  'bosuball': 'bosu ball',
+  'ezbarbell': 'ez barbell',
+  'olympicbarbell': 'olympic barbell',
+  'sledmachine': 'sled machine',
+  'skiergmachine': 'skierg machine',
+  'leveragemachine': 'leverage machine',
+  'ellipticalmachine': 'elliptical machine',
+  'smithmachine': 'smith machine',
+};
+
+// Normalize equipment name function
+function normalizeEquipment(equipment: string): string {
+  const lower = equipment.toLowerCase().trim();
+  return EQUIPMENT_MAPPING[lower.replace(/\s+/g, '')] || lower;
+}
+
 // Query parameters validation schema
 const querySchema = z.object({
   equipment: z.string().optional(),
@@ -41,8 +62,8 @@ export async function GET(request: NextRequest) {
 
     const { equipment, bodyPart, targetMuscle, search, limit, fields } = parseResult.data;
     
-    // Convert equipment to lowercase for case-insensitive matching
-    const normalizedEquipment = equipment?.toLowerCase();
+    // Normalize equipment name using mapping
+    const normalizedEquipment = equipment ? normalizeEquipment(equipment) : undefined;
 
     console.log("🔍 [API] Querying exercises", {
       equipment,
