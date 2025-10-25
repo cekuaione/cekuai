@@ -18,6 +18,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'exercisedb.io',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.ceku.ai',
+      },
     ],
   },
 };
