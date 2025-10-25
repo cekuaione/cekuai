@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
       data.forEach(exercise => {
         enrichedData[exercise.exercise_id] = {
           name: exercise.name,
-          gif_url: `https://www.ceku.ai/${exercise.exercise_id}.gif`,
+          gif_url: exercise.gif_url,
           instructions: exercise.instructions,
         };
       });
